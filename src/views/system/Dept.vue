@@ -1,35 +1,43 @@
 <template>
 
     <div class="animated fadeIn">
+        <Icon type="person-add"></Icon>
+        <i-button type="error" @click="addDept">添加部门</i-button>
+        <br>
         <Table :columns="columns1" :data="data1"></Table>
-        <Page :total="100" @on-change="gopage" align="center"></Page>
+        <Page :total="totalCount" :page-size="pageSize" :current="pageNo" @on-change="gopage" align="center"></Page>
         <Modal
                 v-model="modal1"
                 title="编辑用户"
-                @on-ok="ok"
+                @on-ok="update"
                 @on-cancel="cancel" width="60%">
-            <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
-                <FormItem label="姓名" prop="userName">
-                    <Input type="text" v-model="formCustom.userName"></Input>
+            <Form ref="updateForm" :model="updateForm" :rules="ruleCustom" :label-width="80">
+                <FormItem label="部门名字" prop="deptName">
+                    <Input type="text" v-model="updateForm.deptName"></Input>
                 </FormItem>
-                <FormItem label="年龄" prop="age">
-                    <Input type="password" v-model="formCustom.age"></Input>
-                </FormItem>
-                <FormItem label="地址" prop="addr">
-                    <Input type="text" v-model="formCustom.addr" number></Input>
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" @click="handleSubmit('formCustom')">保存</Button>
-                    <Button type="ghost" @click="handleReset('formCustom')" style="margin-left: 8px">Reset</Button>
-                </FormItem>
+                <!--<FormItem>-->
+                    <!--<Button type="primary" @click="update('updateForm')">保存</Button>-->
+                    <!--<Button type="ghost" @click="handleReset('updateForm')" style="margin-left: 8px">Reset</Button>-->
+                <!--</FormItem>-->
             </Form>
         </Modal>
+        <Modal
+                v-model="modal2"
+                title="添加用户"
+                @on-ok="add"
+                @on-cancel="cancel" width="60%">
+            <Form ref="addForm" :model="addForm" :rules="ruleCustom" :label-width="80">
+                <FormItem label="部门名字" prop="deptName">
+                    <Input type="text" v-model="addForm.deptName"></Input>
+                </FormItem>
 
+            </Form>
+        </Modal>
     </div>
 </template>
-<script>
-    /* eslint-disable indent,comma-dangle,arrow-body-style,space-before-function-paren */
 
+<script type="text/ecmascript-6">
+    import fetch from 'utils/fetch';
 
     export default {
         data() {
@@ -43,7 +51,7 @@
                     callback(new Error('请输入地址'));
                 }
             };
-            const validateAge = (rule, value, callback) => {
+            const validateid = (rule, value, callback) => {
                 if (value==='') {
                     return callback(new Error('年龄不能为空'));
                 }
@@ -61,18 +69,19 @@
                 }, 1000);
             };
             return {
+                tempIndex:0,
+                pageSize:2,
+                pageNo:1,
+                totalPage:0,
+                totalCount:0,
                 columns1: [
                     {
-                        title: '姓名',
-                        key: 'name'
+                        title: '编号',
+                        key: 'id'
                     },
                     {
-                        title: '年龄',
-                        key: 'age'
-                    },
-                    {
-                        title: '地址',
-                        key: 'addr'
+                        title: '部门名字',
+                        key: 'deptName'
                     },
                     {
                         title: '操作',
@@ -124,121 +133,111 @@
                     }
                 ],
                 self: this,
-                columns7: [
-                    {
-                        title: '姓名',
-                        key: 'name',
-                        render (row, column, index) {
-                            return `<Icon type="person"></Icon> <strong>${row.name}</strong>`;
-                        }
-                    },
-                    {
-                        title: '年龄',
-                        key: 'age'
-                    },
-                    {
-                        title: '地址',
-                        key: 'addr'
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        width: 150,
-                        align: 'center',
-                        render (row, column, index) {
-                            return `<i-button type="primary" size="small" @click="show(${index})">查看</i-button> <i-button type="error" size="small" @click="remove(${index})">删除</i-button>`;
-                        }
-                    }
-                ],
-                
                 data1: [
                     {
-                        name: '王小明',
-                        age: 18,
-                        addr: '北京市朝阳区芍药居'
-                    },
-                    {
-                        name: '张小刚',
-                        age: 25,
-                        addr: '北京市海淀区西二旗'
-                    },
-                    {
-                        name: '李小红',
-                        age: 30,
-                        addr: '上海市浦东新区世纪大道'
-                    },
-                    {
-                        name: '周小伟',
-                        age: 26,
-                        addr: '深圳市南山区深南大道'
+                        deptName: '王小明',
+                        id: 18
                     }
                 ],
                 modal1: false,
-                formCustom: {
-                    userName: '',
-                    addr: '',
-                    age: ''
+                modal2: false,
+                updateForm: {
+                    deptName: '',
+                    id: ''
+                },
+                addForm: {
+                    deptName: ''
                 },
                 ruleCustom: {
-                    userName: [
+                    deptName: [
                         { validator: validateUser, trigger: 'blur' }
                     ],
-                    addr: [
-                        { validator: validateAddr, trigger: 'blur' }
-                    ],
-                    age: [
-                        { validator: validateAge, trigger: 'blur' }
+                    id: [
+                        { validator: validateid, trigger: 'blur' }
                     ]
                 }
             }
         },
         methods: {
+            addDept(){
+              this.modal2=true;
+            },
+            add(){
+
+                const dept = this.addForm;
+
+                fetch({
+                    url: '/system/dept',
+                    method: 'post',
+                    data:dept
+                }).then((result) => {
+                    this.data1.unshift(result.data);
+                    this.$Message.success('Success!');
+                });
+            },
             show (index) {
                 this.$Modal.info({
-                    title: '用户信息',
-                    content: `姓名：${this.data1[index].name}<br>年龄：${this.data1[index].age}<br>地址：${this.data1[index].addr}`
+                    title: '部门信息',
+                    content: `姓名：${this.data1[index].deptName}`
                 })
             },
             edit (index) {
                 this.modal1=true;
+                this.tempIndex=index;
+                this.updateForm.deptName=this.data1[index].deptName;
             },
             remove (index) {
-                this.data1.splice(index, 1);
+                const id = this.data1[index].id;
+                fetch({
+                    url: '/system/dept',
+                    method: 'delete',
+                    params:{ids:id}
+                }).then((result) => {
+                    if(result.data=='1')
+                    {
+                        this.$Message.success('Success!');
+                        this.data1.splice(index, 1);
+                    }
+                });
             },
             ok () {
                 this.modal1 = false,
-                    this.$Message.info('点击了确定');
+                this.$Messid.info('点击了确定');
             },
             cancel () {
-                this.$Message.info('点击了取消');
+                this.$Messid.info('点击了取消');
             },
-            show (index) {
-                this.$Modal.info({
-                    title: '用户信息',
-                    content: `姓名：${this.data1[index].name}<br>年龄：${this.data1[index].age}<br>地址：${this.data1[index].addr}`
-                })
+            update (deptName) {
+                this.data1[this.tempIndex].deptName=this.updateForm.deptName;
+                const dept = this.data1[this.tempIndex];
+
+                fetch({
+                    url: '/system/dept',
+                    method: 'put',
+                    data:dept
+                }).then((result) => {
+                    this.$Message.success('Success!');
+                });
             },
-            remove (index) {
-                this.data1.splice(index, 1);
+            handleReset (deptName) {
+                this.$refs[deptName].resetFields();
             },
-            handleSubmit (name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('Success!');
-                    } else {
-                        this.$Message.error('Fail!');
-                    }
-                })
-            },
-            handleReset (name) {
-                this.$refs[name].resetFields();
-            },
-            gopage(page){
-                console.log(page);
+            gopage(pageNo){
+                const pageSize = this.pageSize;
+                fetch({
+                    url: '/system/dept',
+                    method: 'get',
+                    params:{pageNo,pageSize}
+                }).then((result) => {
+                    this.data1=result.data.results;
+                    this.pageNo=pageNo;
+                    this.pageSize=pageSize;
+                    this.totalCount=result.data.totalCount;
+                });
             }
         },
-        mounted:function(){
-            alert('1');
+        created:function(){
+            this.gopage(this.pageNo)
         }
     }
 </script>
