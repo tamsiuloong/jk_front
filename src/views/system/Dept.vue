@@ -1,8 +1,12 @@
 <template>
 
+
     <div class="animated fadeIn">
-        <Icon type="person-add"></Icon>
-        <i-button type="error" @click="addDept">添加部门</i-button>
+        <!--<Icon type="android-add"></Icon>-->
+        <div id="container">
+            <Icon type="android-add-circle"></Icon>
+            <i-button type="error" @click="addDept">添加部门</i-button>
+        </div>
         <br>
         <Table :columns="columns1" :data="data1"></Table>
         <Page :total="totalCount" :page-size="pageSize" :current="pageNo" @on-change="gopage" align="center"></Page>
@@ -202,10 +206,10 @@
             },
             ok () {
                 this.modal1 = false,
-                this.$Messid.info('点击了确定');
+                this.$Message.info('点击了确定');
             },
             cancel () {
-                this.$Messid.info('点击了取消');
+                this.$Message.info('点击了取消');
             },
             update (deptName) {
                 this.data1[this.tempIndex].deptName=this.updateForm.deptName;
@@ -229,7 +233,7 @@
                     method: 'get',
                     params:{pageNo,pageSize}
                 }).then((result) => {
-                    this.data1=result.data.results;
+                    this.data1=result.data.list;
                     this.pageNo=pageNo;
                     this.pageSize=pageSize;
                     this.totalCount=result.data.totalCount;
