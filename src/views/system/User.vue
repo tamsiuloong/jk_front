@@ -18,7 +18,7 @@
             <Form ref="updateForm" :model="updateForm" :rules="ruleCustom" :label-width="80">
                 <FormItem label="所在部门" prop="dept.id">
                     <Select v-model="updateForm.deptId" filterable>
-                        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        <Option v-for="item in cityList" :value="item.id" :key="item.id">{{ item.deptName }}</Option>
                     </Select>
                 </FormItem>
                 <FormItem label="登录名" prop="userName"  >
@@ -47,17 +47,17 @@
             <Form ref="addForm" :model="addForm" :rules="ruleCustom" :label-width="80">
                 <Row>
                     <Col span="11">
-                    <FormItem label="所在部门" prop="dept.id">
-                        <Select v-model="updateForm.deptId" filterable>
-                            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    <FormItem label="所在部门" prop="deptId">
+                        <Select v-model="addForm.deptId" filterable>
+                            <Option v-for="item in deptList" :value="item.id" :key="item.id">{{ item.deptName }}</Option>
                         </Select>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="直属领导" prop="userInfoManagerId">
-                        <Select v-model="updateForm.userInfoManagerId" filterable>
-                            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    <FormItem label="直属领导" prop="managerId">
+                        <Select v-model="addForm.managerId" filterable>
+                            <Option v-for="item in userList" :value="item.id" :key="item.id">{{ item.userName }}</Option>
                         </Select>
                     </FormItem>
                     </Col>
@@ -67,89 +67,94 @@
                 <Row>
                     <Col span="11">
                     <FormItem label="登录名" prop="userName"  >
-                        <Input type="text" v-model="updateForm.userName"></Input>
+                        <Input type="text" v-model="addForm.userName"></Input>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="姓名" prop="userInfoName"  >
-                        <Input type="text" v-model="updateForm.userInfoName"></Input>
+                    <FormItem label="姓名" prop="name"  >
+                        <Input type="text" v-model="addForm.name"></Input>
                     </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="11">
-                    <FormItem label="入职日期" prop="userInfo.joinDate"  >
-                        <DatePicker type="date" placeholder="Select date" style="width: 200px"></DatePicker>
+                    <FormItem label="入职日期" prop="joinDate"  >
+                        <DatePicker v-model="addForm.joinDate" type="date" placeholder="Select date" style="width: 200px"></DatePicker>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="薪水" prop="userInfo.salary"  >
-                        <Input type="text" v-model="updateForm.userName"></Input>
+                    <FormItem label="薪水" prop="salary"  >
+                        <Input type="text" v-model="addForm.salary"></Input>
                     </FormItem>
                     </Col>
                 </Row>
 
                 <Row>
                     <Col span="11">
-                    <FormItem label="等级" prop="userInfo.degree"  >
-                        <Select v-model="updateForm.deptId" filterable>
-                            <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                    <FormItem label="等级" prop="degree"  >
+                        <Select v-model="addForm.degree" filterable>
+                            <Option  v-for="item in degreeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="性别" prop="userInfo.gendery"  >
-                        <RadioGroup v-model="updateForm.deptId" type="button">
-                            <Radio label="男"></Radio>
-                            <Radio label="女"></Radio>
+                    <FormItem label="性别" prop="gender"  >
+                        <RadioGroup v-model="addForm.gender" type="button">
+                            <Radio  label="1">男</Radio>
+                            <Radio  label="0">女</Radio>
                         </RadioGroup>
                     </FormItem>
                     </Col>
+                    <Col span="11">
+                    <FormItem label="状态" prop="state"  >
+                        <Radio-group v-model="addForm.state" type="button">
+                            <Radio label="1" >启用</Radio>
+                            <Radio label="0">停用</Radio>
+                        </Radio-group>
+                    </FormItem>
+                    </Col>
                 </Row>
-
-
-
-
 
                 <Row>
                     <Col span="11">
-                    <FormItem label="岗位" prop="userInfo.gendery"  >
-                        <Input type="text" v-model="updateForm.userInfoName"></Input>
+                    <FormItem label="岗位" prop="station"  >
+                        <Input type="text" v-model="addForm.station"></Input>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="岗位" prop="userInfo.gendery"  >
-                        <Input type="text" v-model="updateForm.userInfoName"></Input>
-                    </FormItem>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="11">
-                    <FormItem label="邮箱" prop="userInfo.gendery"  >
-                        <Input type="text" v-model="updateForm.userInfoName"></Input>
-                    </FormItem>
-                    </Col>
-                    <Col span="2" style="text-align: center"></Col>
-                    <Col span="11">
-                    <FormItem label="出生年月" prop="userInfo.gendery"  >
-                        <DatePicker type="date" placeholder="Select date" style="width: 200px"></DatePicker>
+                    <FormItem label="电话" prop="telephone"  >
+                        <Input type="text" v-model="addForm.telephone"></Input>
                     </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="11">
-                    <FormItem label="排序号" prop="userInfo.gendery"  >
-                        <Input type="text" v-model="updateForm.userInfoName"></Input>
+                    <FormItem label="邮箱" prop="email"  >
+                        <Input type="text" v-model="addForm.email"></Input>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="说明" prop="userInfo.gendery"  >
-                        <Input type="textarea" v-model="updateForm.userInfoName"></Input>
+                    <FormItem label="出生年月" prop="birthday"  >
+                        <DatePicker type="date" v-model="addForm.birthday" placeholder="Select date" style="width: 200px"></DatePicker>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+
+                    <FormItem label="排序号" prop="orderNo"  >
+                        <Input type="text" v-model="addForm.orderNo"></Input>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"></Col>
+                    <Col span="11">
+                    <FormItem label="说明" prop="remark"  >
+                        <Input type="textarea" v-model="addForm.remark"></Input>
                     </FormItem>
                     </Col>
                 </Row>
@@ -320,16 +325,54 @@
                     id: ''
                 },
                 addForm: {
-                    userName: ''
+                    deptId:'',
+                    userName: '',
+                    state: 1,
+                    name: '',
+                    managerId: '',
+                    joinDate: '',
+                    salary: '',
+                    degree: '',
+                    gender: '',
+                    station: '',
+                    telephone: '',
+                    email: '',
+                    birthday: '',
+                    orderNo: '',
+                    remark:''
                 },
                 ruleCustom: {
-                    userName: [
-                        { validator: validateUser, trigger: 'blur' }
-                    ],
-                    id: [
-                        { validator: validateid, trigger: 'blur' }
-                    ]
+//                    userName: [
+//                        { validator: validateUser, trigger: 'blur' }
+//                    ],
+//                    id: [
+//                        { validator: validateid, trigger: 'blur' }
+//                    ]
                 },
+                deptList: {},
+                userList:{},
+                degreeList:[
+                    {
+                        value: '0',
+                        label: '超级管理员'
+                    },
+                    {
+                        value: '1',
+                        label: '跨部门跨人员'
+                    },
+                    {
+                        value: '2',
+                        label: '管理所有下属部门和人员'
+                    },
+                    {
+                        value: '3',
+                        label: '管理本部门'
+                    },
+                    {
+                        value: '4',
+                        label: '普通员工'
+                    }
+                ],
                 cityList: [
                     {
                         value: 'New York',
@@ -366,7 +409,29 @@
             },
             add(){
 
-                const user = this.addForm;
+                const addForm = this.addForm;
+                const user = {
+                    "dept":{
+                        id:addForm.deptId
+                    },
+                    "userName": addForm.userName,
+                    "state": addForm.state,
+                    "userInfo":{
+                        "name": addForm.name,
+                        "manager.id":addForm.managerId,
+                        "joinDate": addForm.joinDate,
+                        "salary": addForm.salary,
+                        "degree": addForm.degree,
+                        "gender": addForm.gender,
+                        "station": addForm.station,
+                        "telephone": addForm.telephone,
+                        "email": addForm.email,
+                        "birthday": addForm.birthday,
+                        "orderNo": addForm.orderNo,
+                        "remark": addForm.remark
+                    }
+                };
+
 
                 fetch({
                     url: '/system/user',
@@ -441,8 +506,22 @@
                 });
             }
         },
-        created:function(){
+        mounted:function(){
             this.gopage(this.pageNo)
+
+            fetch({
+                url: '/system/dept/getAll',
+                method: 'get'
+            }).then((result) => {
+                this.deptList=result.data;
+            });
+            fetch({
+                url: '/system/user/getAll',
+                method: 'get'
+            }).then((result) => {
+                this.userList=result.data;
+            });
+
         }
     }
 </script>
