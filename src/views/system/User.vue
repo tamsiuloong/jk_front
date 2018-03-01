@@ -402,38 +402,10 @@
                 ],
                 self: this,
                 data1: [
-                    {
-                        userName: '王小明',
-                        id: 18,
-                        state:1
-                    }
+
                 ],
                 modal1: false,
                 modal2: false,
-                updateForm: {
-                    "id":"",
-                    "dept":{
-                        id:""
-                    },
-                    "userName": "",
-                    "state": "",
-                    "userInfo":{
-                        "name": "",
-                        "manager":{
-                            id:""
-                        },
-                        "joinDate": "",
-                        "salary": "",
-                        "degree": "",
-                        "gender": "",
-                        "station": "",
-                        "telephone": "",
-                        "email": "",
-                        "birthday": "",
-                        "orderNo": "",
-                        "remark": ""
-                    }
-                },
                 addForm: {
                     "dept":{
                         id:""
@@ -512,32 +484,6 @@
                         label: '普通员工'
                     }
                 ],
-                cityList: [
-                    {
-                        value: 'New York',
-                        label: 'New York'
-                    },
-                    {
-                        value: 'London',
-                        label: 'London'
-                    },
-                    {
-                        value: 'Sydney',
-                        label: 'Sydney'
-                    },
-                    {
-                        value: 'Ottawa',
-                        label: 'Ottawa'
-                    },
-                    {
-                        value: 'Paris',
-                        label: 'Paris'
-                    },
-                    {
-                        value: 'Canberra',
-                        label: 'Canberra'
-                    }
-                ],
                 model11: '',
                 model12: []
             }
@@ -547,32 +493,7 @@
                 this.modal2=true;
             },
             add(){
-
                 const addForm = this.addForm;
-//                const user = {
-//                    "dept":{
-//                        id:addForm.deptId
-//                    },
-//                    "userName": addForm.userName,
-//                    "state": addForm.state,
-//                    "userInfo":{
-//                        "name": addForm.name,
-//                        "manager":{
-//                                id:addForm.managerId
-//                        },
-//                        "joinDate": addForm.joinDate,
-//                        "salary": addForm.salary,
-//                        "degree": addForm.degree,
-//                        "gender": addForm.gender,
-//                        "station": addForm.station,
-//                        "telephone": addForm.telephone,
-//                        "email": addForm.email,
-//                        "birthday": addForm.birthday,
-//                        "orderNo": addForm.orderNo,
-//                        "remark": addForm.remark
-//                    }
-//                };
-
 
                 fetch({
                     url: '/system/user',
@@ -673,9 +594,9 @@
                 });
             }
         },
-        mounted:function(){
-            this.gopage(this.pageNo)
-
+        created:function(){
+            this.gopage(this.pageNo);
+            //加载所有部门
             fetch({
                 url: '/system/dept/getAll',
                 method: 'get',
@@ -683,6 +604,8 @@
             }).then((result) => {
                 this.deptList=result.data;
             });
+
+            //加载所有员工（直属领导）
             fetch({
                 url: '/system/user/getAll',
                 method: 'get'
