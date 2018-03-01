@@ -14,29 +14,122 @@
                 v-model="modal1"
                 title="编辑用户"
                 @on-ok="update"
-                @on-cancel="cancel" width="50%">
+                @on-cancel="cancel" width="60%">
             <Form ref="updateForm" :model="updateForm" :rules="ruleCustom" :label-width="80">
-                <FormItem label="所在部门" prop="dept.id">
-                    <Select v-model="updateForm.deptId" filterable>
-                        <Option v-for="item in cityList" :value="item.id" :key="item.id">{{ item.deptName }}</Option>
-                    </Select>
-                </FormItem>
-                <FormItem label="登录名" prop="userName"  >
-                    <Input type="text" v-model="updateForm.userName"></Input>
-                </FormItem>
-                <FormItem label="姓名" prop="userInfoName"  >
-                    <Input type="text" v-model="updateForm.userInfoName"></Input>
-                </FormItem>
-                <FormItem label="直属领导" prop="userInfoManagerId">
-                    <Select v-model="updateForm.userInfoManagerId" filterable>
-                        <Option v-for="item in cityList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                    </Select>
-                </FormItem>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="所在部门" prop="dept.id">
+                        <Select v-model="updateForm.dept.id" filterable>
+                            <Option v-for="item in deptList" :value="item.id" :key="item.id">{{ item.deptName }}</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"></Col>
+                    <Col span="11">
+                    <FormItem label="直属领导" prop="userInfo.manager.id">
+                        <Select v-model="updateForm.userInfo.manager.id">
+                            <Option v-for="item in userList" :value="item.id" :disabled="item.id==updateForm.id" :key="item.id">{{ item.userName }}</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                </Row>
 
-                <!--<FormItem>-->
-                <!--<Button type="primary" @click="update('updateForm')">保存</Button>-->
-                <!--<Button type="ghost" @click="handleReset('updateForm')" style="margin-left: 8px">Reset</Button>-->
-                <!--</FormItem>-->
+
+                <Row>
+                    <Col span="11">
+                    <FormItem label="登录名" prop="userName"  >
+                        <Input type="text" readonly v-model="updateForm.userName"></Input>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"></Col>
+                    <Col span="11">
+                    <FormItem label="姓名" prop="userInfo.name"  >
+                        <Input type="text" v-model="updateForm.userInfo.name"></Input>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="入职日期" prop="userInfo.joinDate"  >
+                        <DatePicker v-model="updateForm.userInfo.joinDate" format="yyyy-MM-dd" type="date" placeholder="Select date" style="width: 200px"></DatePicker>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"></Col>
+                    <Col span="11">
+                    <FormItem label="薪水" prop="userInfo.salary"  >
+                        <Input type="text" v-model="updateForm.userInfo.salary"></Input>
+                    </FormItem>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col span="11">
+                    <FormItem label="等级" prop="userInfo.degree"  >
+                        <Select v-model="updateForm.userInfo.degree" filterable>
+                            <Option  v-for="item in degreeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"></Col>
+                    <Col span="11">
+                    <FormItem label="性别" prop="userInfo.gender"  >
+                        <RadioGroup v-model="updateForm.userInfo.gender" type="button">
+                            <Radio  label="1">男</Radio>
+                            <Radio  label="0">女</Radio>
+                        </RadioGroup>
+                    </FormItem>
+                    </Col>
+                    <Col span="11">
+                    <FormItem label="状态" prop="state"  >
+                        <Radio-group v-model="updateForm.state" type="button">
+                            <Radio label="1" >启用</Radio>
+                            <Radio label="0">停用</Radio>
+                        </Radio-group>
+                    </FormItem>
+                    </Col>
+                </Row>
+
+                <Row>
+                    <Col span="11">
+                    <FormItem label="岗位" prop="userInfo.station"  >
+                        <Input type="text" v-model="updateForm.userInfo.station"></Input>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"></Col>
+                    <Col span="11">
+                    <FormItem label="电话" prop="userInfo.telephone"  >
+                        <Input type="text" v-model="updateForm.userInfo.telephone"></Input>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="邮箱" prop="userInfo.email"  >
+                        <Input type="text" v-model="updateForm.userInfo.email"></Input>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"></Col>
+                    <Col span="11">
+                    <FormItem label="出生年月" prop="userInfo.birthday"  >
+                        <DatePicker type="date" v-model="updateForm.userInfo.birthday" format="yyyy-MM-dd" placeholder="Select date" style="width: 200px"></DatePicker>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+
+                    <FormItem label="排序号" prop="userInfo.orderNo"  >
+                        <Input type="text" v-model="updateForm.userInfo.orderNo"></Input>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"></Col>
+                    <Col span="11">
+                    <FormItem label="说明" prop="userInfo.remark"  >
+                        <Input type="textarea" v-model="updateForm.userInfo.remark"></Input>
+                    </FormItem>
+                    </Col>
+                </Row>
+
             </Form>
         </Modal>
         <Modal
@@ -47,16 +140,16 @@
             <Form ref="addForm" :model="addForm" :rules="ruleCustom" :label-width="80">
                 <Row>
                     <Col span="11">
-                    <FormItem label="所在部门" prop="deptId">
-                        <Select v-model="addForm.deptId" filterable>
+                    <FormItem label="所在部门" prop="dept.id">
+                        <Select v-model="addForm.dept.id" filterable>
                             <Option v-for="item in deptList" :value="item.id" :key="item.id">{{ item.deptName }}</Option>
                         </Select>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="直属领导" prop="managerId">
-                        <Select v-model="addForm.managerId" filterable>
+                    <FormItem label="直属领导" prop="userInfo.manager.id">
+                        <Select v-model="addForm.userInfo.manager.id" filterable>
                             <Option v-for="item in userList" :value="item.id" :key="item.id">{{ item.userName }}</Option>
                         </Select>
                     </FormItem>
@@ -72,37 +165,37 @@
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="姓名" prop="name"  >
-                        <Input type="text" v-model="addForm.name"></Input>
+                    <FormItem label="姓名" prop="userInfo.name"  >
+                        <Input type="text" v-model="addForm.userInfo.name"></Input>
                     </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="11">
-                    <FormItem label="入职日期" prop="joinDate"  >
-                        <DatePicker v-model="addForm.joinDate" type="date" placeholder="Select date" style="width: 200px"></DatePicker>
+                    <FormItem label="入职日期" prop="userInfo.joinDate"  >
+                        <DatePicker v-model="addForm.userInfo.joinDate" type="date" placeholder="Select date" style="width: 200px"></DatePicker>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="薪水" prop="salary"  >
-                        <Input type="text" v-model="addForm.salary"></Input>
+                    <FormItem label="薪水" prop="userInfo.salary"  >
+                        <Input type="text" v-model="addForm.userInfo.salary"></Input>
                     </FormItem>
                     </Col>
                 </Row>
 
                 <Row>
                     <Col span="11">
-                    <FormItem label="等级" prop="degree"  >
-                        <Select v-model="addForm.degree" filterable>
+                    <FormItem label="等级" prop="userInfo.degree"  >
+                        <Select v-model="addForm.userInfo.degree" filterable>
                             <Option  v-for="item in degreeList" :value="item.value" :key="item.value">{{ item.label }}</Option>
                         </Select>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="性别" prop="gender"  >
-                        <RadioGroup v-model="addForm.gender" type="button">
+                    <FormItem label="性别" prop="userInfo.gender"  >
+                        <RadioGroup v-model="addForm.userInfo.gender" type="button">
                             <Radio  label="1">男</Radio>
                             <Radio  label="0">女</Radio>
                         </RadioGroup>
@@ -120,41 +213,41 @@
 
                 <Row>
                     <Col span="11">
-                    <FormItem label="岗位" prop="station"  >
-                        <Input type="text" v-model="addForm.station"></Input>
+                    <FormItem label="岗位" prop="userInfo.station"  >
+                        <Input type="text" v-model="addForm.userInfo.station"></Input>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="电话" prop="telephone"  >
-                        <Input type="text" v-model="addForm.telephone"></Input>
+                    <FormItem label="电话" prop="userInfo.telephone"  >
+                        <Input type="text" v-model="addForm.userInfo.telephone"></Input>
                     </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="11">
-                    <FormItem label="邮箱" prop="email"  >
-                        <Input type="text" v-model="addForm.email"></Input>
+                    <FormItem label="邮箱" prop="userInfo.email"  >
+                        <Input type="text" v-model="addForm.userInfo.email"></Input>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="出生年月" prop="birthday"  >
-                        <DatePicker type="date" v-model="addForm.birthday" placeholder="Select date" style="width: 200px"></DatePicker>
+                    <FormItem label="出生年月" prop="userInfo.birthday"  >
+                        <DatePicker type="date" v-model="addForm.userInfo.birthday" placeholder="Select date" style="width: 200px"></DatePicker>
                     </FormItem>
                     </Col>
                 </Row>
                 <Row>
                     <Col span="11">
 
-                    <FormItem label="排序号" prop="orderNo"  >
-                        <Input type="text" v-model="addForm.orderNo"></Input>
+                    <FormItem label="排序号" prop="userInfo.orderNo"  >
+                        <Input type="text" v-model="addForm.userInfo.orderNo"></Input>
                     </FormItem>
                     </Col>
                     <Col span="2" style="text-align: center"></Col>
                     <Col span="11">
-                    <FormItem label="说明" prop="remark"  >
-                        <Input type="textarea" v-model="addForm.remark"></Input>
+                    <FormItem label="说明" prop="userInfo.remark"  >
+                        <Input type="textarea" v-model="addForm.userInfo.remark"></Input>
                     </FormItem>
                     </Col>
                 </Row>
@@ -198,7 +291,7 @@
             };
             return {
                 tempIndex:0,
-                pageSize:2,
+                pageSize:20,
                 pageNo:1,
                 totalPage:0,
                 totalCount:0,
@@ -264,20 +357,20 @@
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '查看'),
+//                                h('Button', {
+//                                    props: {
+//                                        type: 'primary',
+//                                        size: 'small'
+//                                    },
+//                                    style: {
+//                                        marginRight: '5px'
+//                                    },
+//                                    on: {
+//                                        click: () => {
+//                                            this.show(params.index)
+//                                        }
+//                                    }
+//                                }, '查看'),
                                 h('Button', {
                                     props: {
                                         type: 'primary',
@@ -318,28 +411,74 @@
                 modal1: false,
                 modal2: false,
                 updateForm: {
-                    deptId:'',
-                    "userInfoName":'',
-                    'userInfoManagerId':'',
-                    userName: '',
-                    id: ''
+                    "id":"",
+                    "dept":{
+                        id:""
+                    },
+                    "userName": "",
+                    "state": "",
+                    "userInfo":{
+                        "name": "",
+                        "manager":{
+                            id:""
+                        },
+                        "joinDate": "",
+                        "salary": "",
+                        "degree": "",
+                        "gender": "",
+                        "station": "",
+                        "telephone": "",
+                        "email": "",
+                        "birthday": "",
+                        "orderNo": "",
+                        "remark": ""
+                    }
                 },
                 addForm: {
-                    deptId:'',
-                    userName: '',
-                    state: 1,
-                    name: '',
-                    managerId: '',
-                    joinDate: '',
-                    salary: '',
-                    degree: '',
-                    gender: '',
-                    station: '',
-                    telephone: '',
-                    email: '',
-                    birthday: '',
-                    orderNo: '',
-                    remark:''
+                    "dept":{
+                        id:""
+                    },
+                    "userName": "",
+                    "state": "",
+                    "userInfo":{
+                        "name": "",
+                        "manager":{
+                            id:""
+                        },
+                        "joinDate": "",
+                        "salary": "",
+                        "degree": "",
+                        "gender": "",
+                        "station": "",
+                        "telephone": "",
+                        "email": "",
+                        "birthday": "",
+                        "orderNo": "",
+                        "remark": ""
+                    }
+                },
+                updateForm: {
+                    "dept":{
+                        id:""
+                    },
+                    "userName": "",
+                    "state": "",
+                    "userInfo":{
+                        "name": "",
+                        "manager":{
+                            id:""
+                        },
+                        "joinDate": "",
+                        "salary": "",
+                        "degree": "",
+                        "gender": "",
+                        "station": "",
+                        "telephone": "",
+                        "email": "",
+                        "birthday": "",
+                        "orderNo": "",
+                        "remark": ""
+                    }
                 },
                 ruleCustom: {
 //                    userName: [
@@ -410,33 +549,35 @@
             add(){
 
                 const addForm = this.addForm;
-                const user = {
-                    "dept":{
-                        id:addForm.deptId
-                    },
-                    "userName": addForm.userName,
-                    "state": addForm.state,
-                    "userInfo":{
-                        "name": addForm.name,
-                        "manager.id":addForm.managerId,
-                        "joinDate": addForm.joinDate,
-                        "salary": addForm.salary,
-                        "degree": addForm.degree,
-                        "gender": addForm.gender,
-                        "station": addForm.station,
-                        "telephone": addForm.telephone,
-                        "email": addForm.email,
-                        "birthday": addForm.birthday,
-                        "orderNo": addForm.orderNo,
-                        "remark": addForm.remark
-                    }
-                };
+//                const user = {
+//                    "dept":{
+//                        id:addForm.deptId
+//                    },
+//                    "userName": addForm.userName,
+//                    "state": addForm.state,
+//                    "userInfo":{
+//                        "name": addForm.name,
+//                        "manager":{
+//                                id:addForm.managerId
+//                        },
+//                        "joinDate": addForm.joinDate,
+//                        "salary": addForm.salary,
+//                        "degree": addForm.degree,
+//                        "gender": addForm.gender,
+//                        "station": addForm.station,
+//                        "telephone": addForm.telephone,
+//                        "email": addForm.email,
+//                        "birthday": addForm.birthday,
+//                        "orderNo": addForm.orderNo,
+//                        "remark": addForm.remark
+//                    }
+//                };
 
 
                 fetch({
                     url: '/system/user',
                     method: 'post',
-                    data:user
+                    data:addForm
                 }).then((result) => {
                     this.data1.unshift(result.data);
                     this.$Message.success('Success!');
@@ -451,7 +592,36 @@
             edit (index) {
                 this.modal1=true;
                 this.tempIndex=index;
-                this.updateForm.userName=this.data1[index].userName;
+                var editUser =this.data1[index];
+
+                //手动赋值的原因：因为data1中的字段太多，上传到服务器 json转对象报错
+                if(editUser.dept != undefined)
+                {
+                    this.updateForm.dept.id= editUser.deptId;
+                }
+                if(editUser.managerId!=undefined)
+                {
+                    this.updateForm.userInfo.manager.id= editUser.managerId;
+                }
+                if(editUser.userInfo != undefined)
+                {
+
+
+                    this.updateForm.userName=editUser.userName;
+                    this.updateForm.id=editUser.id;
+                    this.updateForm.state=editUser.state+"";
+                    this.updateForm.userInfo.name=editUser.userInfo.name;
+                    this.updateForm.userInfo.joinDate=editUser.userInfo.joinDate;
+                    this.updateForm.userInfo.salary=editUser.userInfo.salary;
+                    this.updateForm.userInfo.degree=editUser.userInfo.degree+"";
+                    this.updateForm.userInfo.gender=editUser.userInfo.gender+"";
+                    this.updateForm.userInfo.station=editUser.userInfo.station;
+                    this.updateForm.userInfo.telephone=editUser.userInfo.telephone;
+                    this.updateForm.userInfo.email=editUser.userInfo.email;
+                    this.updateForm.userInfo.birthday=editUser.userInfo.birthday;
+                    this.updateForm.userInfo.orderNo=editUser.userInfo.orderNo;
+                    this.updateForm.userInfo.remark=editUser.userInfo.remark;
+                }
             },
             remove (index) {
                 const id = this.data1[index].id;
@@ -474,20 +644,17 @@
             cancel () {
                 this.$Message.info('点击了取消');
             },
-            update (userName) {
-                this.data1[this.tempIndex].userName=this.updateForm.userName;
-                this.data1[this.tempIndex].userInfo.manager.id=this.updateForm.userInfoManagerId;
-                this.data1[this.tempIndex].dept.id=this.updateForm.deptId;
-                
-                const user = this.data1[this.tempIndex];
-
+            update () {
+                const updateForm = this.updateForm;
                 fetch({
                     url: '/system/user',
                     method: 'put',
-                    data:user
+                    data:updateForm
                 }).then((result) => {
+                    this.data1.unshift(result.data);
                     this.$Message.success('Success!');
                 });
+
             },
             handleReset (userName) {
                 this.$refs[userName].resetFields();
@@ -511,7 +678,8 @@
 
             fetch({
                 url: '/system/dept/getAll',
-                method: 'get'
+                method: 'get',
+
             }).then((result) => {
                 this.deptList=result.data;
             });
