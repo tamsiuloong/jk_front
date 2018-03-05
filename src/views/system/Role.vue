@@ -364,3 +364,8 @@
         }
     }
 </script>
+
+<style scoped>
+    @import "/static/ztree/css/zTreeStyle/zTreeStyle.css";
+    /*@import "/static/ztree/css/demo.css";*/
+</style>
