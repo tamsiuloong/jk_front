@@ -20,12 +20,12 @@
                 <FormItem label="角色名字" prop="name">
                     <Input type="text" v-model="updateForm.name"/>
                 </FormItem>
-                <FormItem label="权限" prop="moduleIds">
-                    <Tree v-model="updateForm.moduleIds" ref="updateModules" :data="data4" multiple show-checkbox></Tree>
-                </FormItem>
+                <!--<FormItem label="权限" prop="moduleIds">-->
+                    <!--<Tree v-model="updateForm.moduleIds" ref="updateModules" :data="data4" multiple show-checkbox></Tree>-->
+                <!--</FormItem>-->
 
-                <FormItem label="权限2" prop="moduleIds">
-                    <ul id="treeDemo" class="ztree"></ul>
+                <FormItem label="权限" prop="moduleIds">
+                    <ul id="updateTree" class="ztree"></ul>
                 </FormItem>
             </Form>
         </Modal>
@@ -39,12 +39,14 @@
                     <Input type="text" v-model="addForm.name"/>
                 </FormItem>
                 <Input type="hidden" v-model="addForm.moduleIds"/>
+                <!--<FormItem label="权限" prop="moduleIds">-->
+
+                    <!--<Tree v-model="addForm.moduleIds" ref="addModules" :data="data3" :load-data="getAllModules" show-checkbox></Tree>-->
+
+                <!--</FormItem>-->
                 <FormItem label="权限" prop="moduleIds">
-
-                    <Tree v-model="addForm.moduleIds" ref="addModules" :data="data3" :load-data="getAllModules" show-checkbox></Tree>
-
+                    <ul id="addTree" class="ztree"></ul>
                 </FormItem>
-
             </Form>
         </Modal>
     </div>
@@ -197,31 +199,37 @@
                     id: [
                         { validator: validateid, trigger: 'blur' }
                     ]
-                }
+                },
+                zTreeObj:{}
             }
         },
         methods: {
             addRole(){
                 this.modal2=true;
-                //初始化tree
-                fetch({
-                    url: '/system/module/getChildren/0',
-                    method: 'get'
-                }).then((result) => {
-                    this.data3 = result.data;
-                });
+
             },
             add(){
 
                 const role = this.addForm;
                 //vue官网 组件-子组件引用章节
-                const selectedNodes = this.$refs.addModules.getCheckedNodes();
-                selectedNodes.forEach((node,i)=>{
-                    this.addForm.moduleIds += node.id;
-                    if(i+1<selectedNodes.length){
-                        this.addForm.moduleIds +=",";
+//                const selectedNodes = this.$refs.addModules.getCheckedNodes();
+//                selectedNodes.forEach((node,i)=>{
+//                    this.addForm.moduleIds += node.id;
+//                    if(i+1<selectedNodes.length){
+//                        this.addForm.moduleIds +=",";
+//                    }
+//                });
+
+                const nodes = this.zTreeObj.getCheckedNodes(true);		//取得选中的结点
+                var str = "";
+                for (let i = 0; i < nodes.length; i++) {
+                    if (str != "") {
+                        str += ",";
                     }
-                });
+                    str += nodes[i].id;
+                }
+
+                this.addForm.moduleIds=str;
                 fetch({
                     url: '/system/role',
                     method: 'post',
@@ -280,11 +288,12 @@
                 const  roleId = this.data1[index].id;
                 //初始化tree
                 fetch({
-                    url: '/system/module/getChildren/0/'+roleId,
+                    url: '/system/module/getAllModules/'+roleId,
                     method: 'get'
                 }).then((result) => {
-                    this.data4 = result.data;
+//                    this.data4 = result.data;
                     this.modal1=true;
+                    this.zTreeObj = $.fn.zTree.init($("#updateTree"), this.setting, result.data);
                 });
 
 
@@ -293,13 +302,26 @@
 
                 const role = this.updateForm;
                 //vue官网 组件-子组件引用章节
-                const selectedNodes = this.$refs.updateModules.getCheckedNodes();
-                selectedNodes.forEach((node,i)=>{
-                    this.updateForm.moduleIds += node.id;
-                    if(i+1<selectedNodes.length){
-                        this.updateForm.moduleIds +=",";
+//                const selectedNodes = this.$refs.updateModules.getCheckedNodes();
+//                selectedNodes.forEach((node,i)=>{
+//                    this.updateForm.moduleIds += node.id;
+//                    if(i+1<selectedNodes.length){
+//                        this.updateForm.moduleIds +=",";
+//                    }
+//                });
+
+
+
+                const nodes = this.zTreeObj.getCheckedNodes(true);		//取得选中的结点
+                var str = "";
+                for (let i = 0; i < nodes.length; i++) {
+                    if (str != "") {
+                        str += ",";
                     }
-                });
+                    str += nodes[i].id;
+                }
+
+                this.updateForm.moduleIds=str;
                 fetch({
                     url: '/system/role',
                     method: 'put',
@@ -329,7 +351,14 @@
             this.gopage(this.pageNo);
 
 
-            $.fn.zTree.init($("#treeDemo"), this.setting, this.zNodes);
+            //初始化addTree
+            fetch({
+                url: '/system/module/getAllModules',
+                method: 'get'
+            }).then((result) => {
+                // this.data3 = result.data;
+                this.zTreeObj = $.fn.zTree.init($("#addTree"), this.setting, result.data);
+            });
 
 
         }
