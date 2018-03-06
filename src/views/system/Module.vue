@@ -1,41 +1,204 @@
 <template>
 
+
     <div class="animated fadeIn">
+        <!--<Icon type="android-add"></Icon>-->
+        <div id="container">
+            <Icon type="android-add-circle"></Icon>
+            <i-button type="error" @click="addUser">添加模块</i-button>
+        </div>
+        <br>
         <Table :columns="columns1" :data="data1"></Table>
-        <Page :total="100" @on-change="gopage" align="center"></Page>
+        <Page :total="totalCount" :page-size="pageSize" :current="pageNo" @on-change="gopage" align="center"></Page>
         <Modal
                 v-model="modal1"
-                title="编辑用户"
-                @on-ok="ok"
+                title="编辑模块"
+                @on-ok="update"
                 @on-cancel="cancel" width="60%">
-            <Form ref="formCustom" :model="formCustom" :rules="ruleCustom" :label-width="80">
-                <FormItem label="姓名" prop="userName">
-                    <Input type="text" v-model="formCustom.userName"></Input>
-                </FormItem>
-                <FormItem label="年龄" prop="age">
-                    <Input type="password" v-model="formCustom.age"></Input>
-                </FormItem>
-                <FormItem label="地址" prop="addr">
-                    <Input type="text" v-model="formCustom.addr" number></Input>
-                </FormItem>
-                <FormItem>
-                    <Button type="primary" @click="handleSubmit('formCustom')">保存</Button>
-                    <Button type="ghost" @click="handleReset('formCustom')" style="margin-left: 8px">Reset</Button>
-                </FormItem>
+            <Form ref="updateForm" :model="dataForm" :rules="ruleCustom" :label-width="80">
+                <Row>
+
+                    <Col span="14">
+                    <FormItem label="等级" prop="ctype"  >
+                        <RadioGroup v-model="dataForm.ctype"   @on-change="changeCType" >
+                            <Radio  label="0">主菜单</Radio>
+                            <Radio  label="1">左侧菜单</Radio>
+                            <Radio  label="2">按钮</Radio>
+                            <Radio  label="3">链接</Radio>
+                            <Radio  label="4">状态</Radio>
+                        </RadioGroup>
+                    </FormItem>
+                    </Col>
+
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="父模块" prop="parentId"  >
+                        <Select v-model="dataForm.parentId" filterable>
+                            <Option v-for="item in moduleList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="登录名" prop="name"  >
+                        <Input type="text" v-model="dataForm.name"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
+                    <FormItem label="层数" prop="layerNum"  >
+                        <Input type="text" v-model="dataForm.layerNum"/>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="权限标识" prop="cpermission"  >
+                        <Input type="text" v-model="dataForm.cpermission"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
+                    <FormItem label="链接" prop="curl"  >
+                        <Input type="text" v-model="dataForm.curl"/>
+                    </FormItem>
+                    </Col>
+                </Row>
+
+                <Row>
+
+
+                    <Col span="11">
+                    <FormItem label="状态" prop="state"  >
+                        <Radio-group v-model="dataForm.state" type="button">
+                            <Radio label="1" >启用</Radio>
+                            <Radio label="0">停用</Radio>
+                        </Radio-group>
+                    </FormItem>
+                    </Col>
+                </Row>
+
+
+                <Row>
+                    <Col span="11">
+
+                    <FormItem label="排序号" prop="orderNo"  >
+                        <Input type="text" v-model="dataForm.orderNo"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
+                    <FormItem label="说明" prop="remark"  >
+                        <Input type="textarea" v-model="dataForm.remark"/>
+                    </FormItem>
+                    </Col>
+                </Row>
+
             </Form>
         </Modal>
+        <Modal
+                v-model="modal2"
+                title="添加模块"
+                @on-ok="add"
+                @on-cancel="cancel" width="60%">
+            <Form ref="dataForm" :model="dataForm" :rules="ruleCustom" :label-width="80">
 
+
+                <Row>
+
+                    <Col span="14">
+                    <FormItem label="等级" prop="ctype"  >
+                        <RadioGroup v-model="dataForm.ctype"   @on-change="changeCType" >
+                            <Radio  label="0">主菜单</Radio>
+                            <Radio  label="1">左侧菜单</Radio>
+                            <Radio  label="2">按钮</Radio>
+                            <Radio  label="3">链接</Radio>
+                            <Radio  label="4">状态</Radio>
+                        </RadioGroup>
+                    </FormItem>
+                    </Col>
+
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="父模块" prop="parentId"  >
+                        <Select v-model="dataForm.parentId" filterable>
+                            <Option v-for="item in moduleList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                        </Select>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="登录名" prop="name"  >
+                        <Input type="text" v-model="dataForm.name"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
+                    <FormItem label="层数" prop="layerNum"  >
+                        <Input type="text" readonly v-model="dataForm.layerNum"/>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="权限标识" prop="cpermission"  >
+                        <Input type="text" v-model="dataForm.cpermission"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
+                    <FormItem label="链接" prop="curl"  >
+                        <Input type="text" v-model="dataForm.curl"/>
+                    </FormItem>
+                    </Col>
+                </Row>
+
+                <Row>
+
+
+                    <Col span="11">
+                    <FormItem label="状态" prop="state"  >
+                        <Radio-group v-model="dataForm.state" type="button">
+                            <Radio label="1" >启用</Radio>
+                            <Radio label="0">停用</Radio>
+                        </Radio-group>
+                    </FormItem>
+                    </Col>
+                </Row>
+
+
+                <Row>
+                    <Col span="11">
+
+                    <FormItem label="排序号" prop="orderNo"  >
+                        <Input type="text" v-model="dataForm.orderNo"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
+                    <FormItem label="说明" prop="remark"  >
+                        <Input type="textarea" v-model="dataForm.remark"/>
+                    </FormItem>
+                    </Col>
+                </Row>
+
+            </Form>
+        </Modal>
     </div>
 </template>
-<script>
-    /* eslint-disable indent,comma-dangle,arrow-body-style,space-before-function-paren */
 
+<script type="text/ecmascript-6">
+    import fetch from 'utils/fetch';
 
     export default {
         data() {
             const validateUser = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请输入用户名'));
+                    callback(new Error('请输入模块名'));
                 }
             };
             const validateAddr = (rule, value, callback) => {
@@ -43,7 +206,7 @@
                     callback(new Error('请输入地址'));
                 }
             };
-            const validateAge = (rule, value, callback) => {
+            const validateid = (rule, value, callback) => {
                 if (value==='') {
                     return callback(new Error('年龄不能为空'));
                 }
@@ -61,18 +224,168 @@
                 }, 1000);
             };
             return {
+                tempIndex:0,
+                pageSize:20,
+                pageNo:1,
+                totalPage:0,
+                totalCount:0,
                 columns1: [
                     {
-                        title: '姓名',
+                        title: '编号',
+                        key: 'id'
+                    },
+                    {
+                        title: '模块名',
                         key: 'name'
                     },
                     {
-                        title: '年龄',
-                        key: 'age'
+                        title: '层数',
+                        key: 'layerNum'
                     },
                     {
-                        title: '地址',
-                        key: 'addr'
+                        title: '权限标识',
+                        key: 'cpermission'
+                    },
+                    {
+                        title: '链接',
+                        key: 'curl'
+                    },
+                    {
+                        title: '类型',
+                        key: 'ctype',
+                        filters: [
+                            {
+                                label: '主菜单',
+                                value: 0
+                            },
+                            {
+                                label: '左侧菜单',
+                                value: 1
+                            },
+                            {
+                                label: '按钮',
+                                value: 2
+                            },
+                            {
+                                label: '链接',
+                                value: 3
+                            },
+                            {
+                                label: '状态',
+                                value: 4
+                            }
+                        ],
+                        filterMultiple: false,
+                        filterMethod (value, row) {
+                            if (value === 0) {
+                                return row.ctype===0;
+                            } else if (value === 1) {
+                                return row.ctype===1;
+                            }else if (value === 2) {
+                                return row.ctype===2;
+                            }else if (value === 3) {
+                                return row.ctype===3;
+                            }else if (value === 4) {
+                                return row.ctype===4;
+                            }
+                        },
+                        render: (h, params) => {
+                            const task_status=parseInt(params.row.state);
+
+                            if(task_status===0)
+                                return h('div', [
+                                    h('Tag', {
+                                        props: {
+                                            type: 'dot',
+                                            color: "green"
+                                        }
+                                    }, "主菜单"),
+                                ]);
+
+                            else if(task_status===1)
+                                return h('div', [
+                                    h('Tag', {
+                                        props: {
+                                            type: 'dot',
+                                            color: "green"
+                                        }
+                                    }, "左侧菜单"),
+                                ]);
+                            else if(task_status===2)
+                                return h('div', [
+                                    h('Tag', {
+                                        props: {
+                                            type: 'dot',
+                                            color: "green"
+                                        }
+                                    }, "按钮"),
+                                ]);
+                            else if(task_status===3)
+                                return h('div', [
+                                    h('Tag', {
+                                        props: {
+                                            type: 'dot',
+                                            color: "green"
+                                        }
+                                    }, "链接"),
+                                ]);
+                            else if(task_status===4)
+                                return h('div', [
+                                    h('Tag', {
+                                        props: {
+                                            type: 'dot',
+                                            color: "green"
+                                        }
+                                    }, "状态"),
+                                ]);
+                        }
+                    },
+                    {
+                        title: '状态',
+                        ellipsis:'true',
+                        key:'state',
+                        filters: [
+                            {
+                                label: '启用',
+                                value: 1
+                            },
+                            {
+                                label: '禁用',
+                                value: 0
+                            }
+                        ],
+                        filterMultiple: false,
+                        filterMethod (value, row) {
+                            if (value === 1) {
+                                return row.state===1;
+                            } else if (value === 0) {
+                                return row.state===0;
+                            }
+                        },
+                        render: (h, params) => {
+                            const task_status=parseInt(params.row.state);
+
+                            if(task_status===1)
+                                return h('div', [
+                                    h('Tag', {
+                                        props: {
+                                            type: 'dot',
+                                            color: "green"
+                                        }
+                                    }, "启用"),
+                                ]);
+
+                            else if(task_status===0)
+                                return h('div', [
+
+                                    h('Tag', {
+                                        props: {
+                                            type: 'dot',
+                                            color: "red"
+                                        }
+                                    }, "禁用"),
+                                ]);
+                        }
                     },
                     {
                         title: '操作',
@@ -80,20 +393,6 @@
                         align: 'center',
                         render: (h, params) => {
                             return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '查看'),
                                 h('Button', {
                                     props: {
                                         type: 'primary',
@@ -124,118 +423,157 @@
                     }
                 ],
                 self: this,
-                columns7: [
-                    {
-                        title: '姓名',
-                        key: 'name',
-                        render (row, column, index) {
-                            return `<Icon type="person"></Icon> <strong>${row.name}</strong>`;
-                        }
-                    },
-                    {
-                        title: '年龄',
-                        key: 'age'
-                    },
-                    {
-                        title: '地址',
-                        key: 'addr'
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        width: 150,
-                        align: 'center',
-                        render (row, column, index) {
-                            return `<i-button type="primary" size="small" @click="show(${index})">查看</i-button> <i-button type="error" size="small" @click="remove(${index})">删除</i-button>`;
-                        }
-                    }
-                ],
-                
                 data1: [
-                    {
-                        name: '王小明',
-                        age: 18,
-                        addr: '北京市朝阳区芍药居'
-                    },
-                    {
-                        name: '张小刚',
-                        age: 25,
-                        addr: '北京市海淀区西二旗'
-                    },
-                    {
-                        name: '李小红',
-                        age: 30,
-                        addr: '上海市浦东新区世纪大道'
-                    },
-                    {
-                        name: '周小伟',
-                        age: 26,
-                        addr: '深圳市南山区深南大道'
-                    }
+
                 ],
                 modal1: false,
-                formCustom: {
-                    userName: '',
-                    addr: '',
-                    age: ''
+                modal2: false,
+                dataForm: {
+                    "name":"",
+                    "moduleName": "",
+                    "layerNum": "1",
+                    "cpermission": "",
+                    "curl": "",
+                    "ctype": "0",
+                    "state": "1",
+                    "remark": "",
+                    "orderNo": "",
+                    "parentId": ""
                 },
+                moduleList:{},
                 ruleCustom: {
-                    userName: [
-                        { validator: validateUser, trigger: 'blur' }
-                    ],
-                    addr: [
-                        { validator: validateAddr, trigger: 'blur' }
-                    ],
-                    age: [
-                        { validator: validateAge, trigger: 'blur' }
-                    ]
-                }
+//                    moduleName: [
+//                        { validator: validateUser, trigger: 'blur' }
+//                    ],
+//                    id: [
+//                        { validator: validateid, trigger: 'blur' }
+//                    ]
+                },
+                moduleList: {},
+                moduleList:{},
+                degreeList:[
+                    {
+                        value: '0',
+                        label: '超级管理员'
+                    },
+                    {
+                        value: '1',
+                        label: '跨部门跨人员'
+                    },
+                    {
+                        value: '2',
+                        label: '管理所有下属部门和人员'
+                    },
+                    {
+                        value: '3',
+                        label: '管理本部门'
+                    },
+                    {
+                        value: '4',
+                        label: '普通员工'
+                    }
+                ],
+                model11: '',
+                model12: []
             }
         },
         methods: {
-            show (index) {
-                this.$Modal.info({
-                    title: '用户信息',
-                    content: `姓名：${this.data1[index].name}<br>年龄：${this.data1[index].age}<br>地址：${this.data1[index].addr}`
-                })
+            addUser(){
+                this.modal2=true;
+
+                //初始化父模块列表
+                this.moduleList = {};
+
+            },
+            add(){
+                const dataForm = this.dataForm;
+
+                fetch({
+                    url: '/system/module',
+                    method: 'post',
+                    data:dataForm
+                }).then((result) => {
+                    this.data1.unshift(result.data);
+                    this.$Message.success('Success!');
+                });
+            },
+            changeCType(type){
+                    this.dataForm.layerNum = parseInt(type)+1;
+
+                    fetch({
+                        url: '/system/module/getParent/'+type,
+                        method: 'get'
+                    }).then((result) => {
+                        this.moduleList=result.data;
+                    });
             },
             edit (index) {
                 this.modal1=true;
+                this.tempIndex=index;
+                var editUser =this.data1[index];
+
+                this.dataForm = editUser;
+                //radio组件lavle接受字符串，因此自己转换一下 int -> string
+                this.dataForm.ctype=editUser.ctype+"";
+                this.dataForm.state=editUser.state+"";
+
+                //初始化父菜单列表
+                this.changeCType(editUser.ctype);
             },
             remove (index) {
-                this.data1.splice(index, 1);
+                const id = this.data1[index].id;
+                fetch({
+                    url: '/system/module',
+                    method: 'delete',
+                    params:{ids:id}
+                }).then((result) => {
+                    if(result.data=='1')
+                    {
+                        this.$Message.success('Success!');
+                        this.data1.splice(index, 1);
+                    }
+                });
             },
             ok () {
                 this.modal1 = false,
-                    this.$Message.info('点击了确定');
+                        this.$Message.info('点击了确定');
             },
             cancel () {
                 this.$Message.info('点击了取消');
             },
-            show (index) {
-                this.$Modal.info({
-                    title: '用户信息',
-                    content: `姓名：${this.data1[index].name}<br>年龄：${this.data1[index].age}<br>地址：${this.data1[index].addr}`
-                })
+            update () {
+                const dataForm = this.dataForm;
+                fetch({
+                    url: '/system/module',
+                    method: 'put',
+                    data:dataForm
+                }).then((result) => {
+                    this.data1.unshift(result.data);
+                    this.$Message.success('Success!');
+                });
+
             },
-            remove (index) {
-                this.data1.splice(index, 1);
+            handleReset (moduleName) {
+                this.$refs[moduleName].resetFields();
             },
-            handleSubmit (name) {
-                this.$refs[name].validate((valid) => {
-                    if (valid) {
-                        this.$Message.success('Success!');
-                    } else {
-                        this.$Message.error('Fail!');
-                    }
-                })
-            },
-            handleReset (name) {
-                this.$refs[name].resetFields();
-            },
-            gopage(page){
-                console.log(page);
+            gopage(pageNo){
+                const pageSize = this.pageSize;
+                fetch({
+                    url: '/system/module',
+                    method: 'get',
+                    params:{pageNo,pageSize}
+                }).then((result) => {
+                    this.data1=result.data.list;
+                    this.pageNo=pageNo;
+                    this.pageSize=pageSize;
+                    this.totalCount=result.data.totalCount;
+                });
             }
         },
+        created:function(){
+            this.gopage(this.pageNo);
+
+
+        }
     }
 </script>

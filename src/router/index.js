@@ -158,7 +158,7 @@ export const asyncRouterMap = [
             {path: '/system/dept', name: '部门管理', icon: 'speedometer', component: _import('system/Dept')},
             {path: '/system/user', name: '用户管理', icon: 'thumbsup', component: _import('system/User')},
             {path: '/system/role', name: '角色管理', icon: 'thumbsup', component: _import('system/Role')},
-            {path: '/system/module', name: '权限管理', icon: 'thumbsup', component: _import('system/Module')}
+            {path: '/system/module', name: '模块管理', icon: 'thumbsup', component: _import('system/Module')}
 
         ]
     },
