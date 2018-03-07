@@ -5,7 +5,7 @@ const user = {
   state: {
     user: '',
     status: '',
-    email: '',
+    username: '',
     code: '',
     uid: undefined,
     auth_type: '',
@@ -32,8 +32,8 @@ const user = {
     SET_UID: (state, uid) => {
       state.uid = uid;
     },
-    SET_EMAIL: (state, email) => {
-      state.email = email;
+    SET_EMAIL: (state, username) => {
+      state.username = username;
     },
     SET_INTRODUCTION: (state, introduction) => {
       state.introduction = introduction;
@@ -64,14 +64,14 @@ const user = {
   actions: {
     // 邮箱登录
     LoginByEmail({ commit }, userInfo) {
-      const email = userInfo.email.trim();
+      const username = userInfo.username.trim();
       return new Promise((resolve, reject) => {
-        loginByEmail(email, userInfo.password).then(response => {
-          const data = response.data;
+        loginByEmail(username, userInfo.password).then(response => {
+          const body = response.data.body;
           console.log(response.data);
-          Cookies.set('Admin-Token', response.data.token);
-          commit('SET_TOKEN', data.token);
-          commit('SET_EMAIL', email);
+          Cookies.set('Admin-Token', body.token);
+          commit('SET_TOKEN', body.token);
+          commit('SET_EMAIL', username);
           resolve();
         }).catch(error => {
           reject(error);
@@ -84,8 +84,8 @@ const user = {
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
         getInfo(state.token).then(response => {
-          const data = response.data;
-          commit('SET_ROLES', data.role);
+          const data = response.data.body;
+          commit('SET_ROLES', data.permissions);
           commit('SET_NAME', data.name);
           commit('SET_AVATAR', data.avatar);
           commit('SET_UID', data.uid);
@@ -101,7 +101,7 @@ const user = {
     LoginByThirdparty({ commit, state }, code) {
       return new Promise((resolve, reject) => {
         commit('SET_CODE', code);
-        loginByThirdparty(state.status, state.email, state.code, state.auth_type).then(response => {
+        loginByThirdparty(state.status, state.username, state.code, state.auth_type).then(response => {
           commit('SET_TOKEN', response.data.token);
           Cookies.set('Admin-Token', response.data.token);
           resolve();

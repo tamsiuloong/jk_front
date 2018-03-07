@@ -12,8 +12,6 @@
     <ul class="nav navbar-nav d-md-down-none">
       
        <li class="nav-item header-item">
-  
-
           <router-link tag="div" to='/'  style="height:55px;" class="nav-link">
             <p><Icon type="compose" size='30' color="#2d8cf0"></Icon></p>
             <p  style="color:white"> demo </p>
@@ -63,7 +61,7 @@
          <router-link tag="div" to='/stat'  style="height:55px;" class="nav-link">
             <p><Icon type="trophy" size='30' color="#2d8cf0"></Icon></p>
             <p  style="color:white"> 销量排行 </p>
-        </router-link> 
+         </router-link>
 
 
       </li>
@@ -122,7 +120,7 @@
     </ul>
   </navbar>
 </template>
-<script>
+<script type="text/ecmascript-6">
 
 import navbar from './Navbar'
 

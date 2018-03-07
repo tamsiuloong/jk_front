@@ -6,11 +6,28 @@ import { asyncRouterMap, constantRouterMap } from 'src/router';
  * @param route
  */
 function hasPermission(roles, route) {
-  if (route.meta && route.meta.role) {
-    return roles.some(role => route.meta.role.indexOf(role) >= 0)
-  } else {
-    return true
-  }
+  // if (route.meta && route.meta.role) {
+  //   return roles.some(role => route.meta.role.indexOf(role) >= 0)
+  // } else {
+  //   return true
+  // }
+    if(roles&&route){
+        // roles.forEach(function(role,k){
+        //     if(route.indexOf(role)!=-1)
+        //     {
+        //         return true;
+        //     }
+        // });
+        for(let i = 0 ;i < roles.length;i++)
+        {
+            if(roles[i]===route.name)
+            {
+
+            }
+            return true;
+        }
+    }
+    return false;
 }
 
 /**

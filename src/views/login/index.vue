@@ -3,8 +3,8 @@
     <div id="canvascontainer" ref='can'></div>
 
     <Form ref="loginForm" autoComplete="on" :model="loginForm" :rules="loginRules"  class="card-box login-form">
-        <Form-item prop="email">
-            <Input type="text" v-model="loginForm.email" placeholder="Username" autoComplete="on">
+        <Form-item prop="username">
+            <Input type="text" v-model="loginForm.username" placeholder="Username" autoComplete="on">
                 <Icon type="ios-person-outline" slot="prepend" ></Icon>
             </Input>
         </Form-item>
@@ -23,15 +23,15 @@
     </div>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
     import { isWscnEmail } from 'utils/validate';
 
     export default {
       name: 'login',
       data() {
-        const validateEmail = (rule, value, callback) => {
-          if (!isWscnEmail(value)) {
-            callback(new Error('请输入正确的合法邮箱'));
+        const validateUsername = (rule, value, callback) => {
+          if (value.length < 3) {
+            callback(new Error('账号不能小于6位'));
           } else {
             callback();
           }
@@ -45,12 +45,12 @@
         };
         return {
           loginForm: {
-            email: 'admin@wz.com',
-            password: ''
+            username: 'cgx',
+            password: '123456'
           },
           loginRules: {
-            email: [
-                { required: true, trigger: 'blur', validator: validateEmail }
+            username: [
+                { required: true, trigger: 'blur', validator: validateUsername }
             ],
             password: [
                 { required: true, trigger: 'blur', validator: validatePass }
