@@ -45,8 +45,8 @@
         };
         return {
           loginForm: {
-            username: 'cgx',
-            password: '123456'
+            username: 'bill',
+            password: 'abc123'
           },
           loginRules: {
             username: [

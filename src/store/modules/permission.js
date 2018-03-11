@@ -11,23 +11,23 @@ function hasPermission(roles, route) {
   // } else {
   //   return true
   // }
-    if(roles&&route){
-        // roles.forEach(function(role,k){
-        //     if(route.indexOf(role)!=-1)
-        //     {
-        //         return true;
-        //     }
-        // });
-        for(let i = 0 ;i < roles.length;i++)
-        {
-            if(roles[i]===route.name)
-            {
-
-            }
+  //   if(roles&&route){
+  //       // roles.forEach(function(role,k){
+  //       //     if(route.indexOf(role)!=-1)
+  //       //     {
+  //       //         return true;
+  //       //     }
+  //       // });
+  //       for(let i = 0 ;i < roles.length;i++)
+  //       {
+  //           if(roles[i]===route.name)
+  //           {
+  //
+  //           }
             return true;
-        }
-    }
-    return false;
+  //       }
+  //   }
+  //   return false;
 }
 
 /**
@@ -105,11 +105,11 @@ const permission = {
       return new Promise(resolve => {
         const { roles } = data
         let accessedRouters
-        if (roles.indexOf('admin') >= 0) {
+        // if (roles.indexOf('admin') >= 0) {
           accessedRouters = asyncRouterMap
-        } else {
-          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
-        }
+        // } else {
+        //   accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+        // }
 
 
         commit('SET_ROUTERS', accessedRouters);

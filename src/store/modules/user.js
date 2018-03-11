@@ -67,11 +67,11 @@ const user = {
       const username = userInfo.username.trim();
       return new Promise((resolve, reject) => {
         loginByEmail(username, userInfo.password).then(response => {
-          const body = response.data.body;
+          const body = response.data;
           console.log(response.data);
-          Cookies.set('Admin-Token', body.token);
-          commit('SET_TOKEN', body.token);
-          commit('SET_EMAIL', username);
+          Cookies.set('Admin-Token', body.access_token);
+          commit('SET_TOKEN', body.access_token);
+          commit('SET_EMAIL', access_token);
           resolve();
         }).catch(error => {
           reject(error);

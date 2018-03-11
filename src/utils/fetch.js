@@ -3,19 +3,29 @@ import store from '../store';
 import vue from 'vue';
 // import router from '../router';
 
+// axios.defaults.headers.post['Content-Type'] = 'application/json';
 // 创建axios实例
 const service = axios.create({
   baseURL: process.env.BASE_API, // api的base_url
-  timeout: 500,                // 请求超时时间
-  withCredentials:true         //跨域携带cookie
+  timeout: 5000
+  // ,             // 请求超时时间
+  // withCredentials:true,         //跨域携带cookie
+  // auth: {
+  //   username: 'jk_front',
+  //   password: '123456'
+  // }
 });
 
 // request拦截器
 service.interceptors.request.use(config => {
+  
   // Do something before request is sent
   if (store.getters.token) {
-    config.headers['X-Token'] = store.getters.token; // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+    config.headers['access_token'] = store.getters.token; // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
   }
+  // else{
+  //   config.headers['authorization']="Basic amtfZnJvbnQ6MTIzNDU2";
+  // }
   return config;
 }, error => {
   // Do something with request error
@@ -55,11 +65,11 @@ service.interceptors.response.use(
 //     }
   error => {
     console.log('err' + error);// for debug
-    vue.$Message.error({
-                    message: error.message,
-                    duration: 5 * 1000,
-                    closable: true
-                });
+      // vm.$Message.error({
+      //               message: error.message,
+      //               duration: 5 * 1000,
+      //               closable: true
+      //           });
     return Promise.reject(error);
   }
 )

@@ -3,12 +3,17 @@ import fetch from 'utils/fetch';
 export function loginByEmail(username, password) {
   const data = {
     username,
-    password
+    password,
+    "grant_type": "password"
   };
   return fetch({
-    url: '/login/loginbyemail',
-    method: 'post',
-    params:data
+    url: '/oauth/token',
+    method: 'POST',
+    params:data,
+    auth: {
+      username: 'jk_front',
+      password: '123456'
+    }
   });
 }
 
@@ -19,11 +24,11 @@ export function logout() {
   });
 }
 
-export function getInfo(token) {
+export function getInfo(access_token) {
   return fetch({
     url: '/user/info',
     method: 'get',
-    params: { token }
+    params: { access_token }
   });
 }
 
