@@ -39,12 +39,12 @@ export const asyncRouterMap = [
 
     {
         path: '/',
-        redirect: '/dashboard',
+        redirect: '/welcome',
         name: '首页',
         component: Full,
         hidden: false,
         children: [
-            {path: '/dashboard', name: 'Dashboard', icon: 'speedometer', component: _import('Dashboard')},
+            {path: '/welcome', name: '欢迎', icon: 'speedometer', component: _import('Welcome')},
             {path: '/introduction', name: '介绍', icon: 'thumbsup', component: _import('Introduction')},
             {
                 path: '/components', name: 'component组件', redirect: '/components/buttons', icon: 'bookmark',

@@ -83,7 +83,7 @@
         <a href="javascript:void(0)">
            <span slot="button">
           <img src="static/img/avatars/1.jpeg" class="img-avatar" alt="o">
-          <span class="d-md-down-none">admin</span>
+          <span class="d-md-down-none">{{username}}</span>
           </span>
         </a>
         <Dropdown-menu slot="list">
@@ -124,8 +124,12 @@ export default {
   name: 'header',
   components: {
     navbar,
-    
   },
+    data(){
+        return {
+           username:this.$store.getters.name
+        }
+    },
   methods: {
     Logout(e){
          e.preventDefault();
