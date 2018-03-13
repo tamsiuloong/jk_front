@@ -13,25 +13,34 @@
       
        <li class="nav-item header-item">
           <router-link tag="div" to='/'  style="height:55px;" class="nav-link">
-            <p><Icon type="compose" size='30' color="#2d8cf0"></Icon></p>
-            <p  style="color:white"> demo </p>
+            <p><Icon type="home" size='30' color="#2d8cf0"></Icon></p>
+            <p  style="color:white"> 系统首页 </p>
           </router-link>
       </li>
         <li class="nav-item header-item">
             <router-link tag="div" to='/system'  style="height:55px;" class="nav-link">
-                <p><Icon type="compose" size='30' color="#2d8cf0"></Icon></p>
+                <p><Icon type="settings" size='30' color="#2d8cf0"></Icon></p>
                 <p  style="color:white"> 系统管理 </p>
             </router-link>
         </li>
         <li class="nav-item header-item">
         
         <router-link tag="div" to='/cargo'  style="height:55px;" class="nav-link">
-            <p><Icon type="stats-bars" size='30' color="#2d8cf0"></Icon></p>
+            <p><Icon type="navigate" size='30' color="#2d8cf0"></Icon></p>
             <p  style="color:white"> 货运管理 </p>
         </router-link> 
 
 
       </li>
+
+        <li class="nav-item header-item">
+
+            <router-link tag="div" to='/stat'  style="height:55px;" class="nav-link">
+                <p><Icon type="stats-bars" size='30' color="#2d8cf0"></Icon></p>
+                <p  style="color:white"> 统计分析 </p>
+            </router-link>
+
+        </li>
 
    <!--<li class="nav-item header-item">-->
         <!--&lt;!&ndash;   &ndash;&gt;-->
@@ -55,16 +64,7 @@
       <!--</li>-->
 
 
-        <li class="nav-item header-item">
-      
 
-         <router-link tag="div" to='/stat'  style="height:55px;" class="nav-link">
-            <p><Icon type="trophy" size='30' color="#2d8cf0"></Icon></p>
-            <p  style="color:white"> 销量排行 </p>
-         </router-link>
-
-
-      </li>
 
 
 
@@ -82,24 +82,20 @@
       <Dropdown class="nav-item">
         <a href="javascript:void(0)">
            <span slot="button">
-          <img src="static/img/avatars/6.jpg" class="img-avatar" alt="o">
+          <img src="static/img/avatars/1.jpeg" class="img-avatar" alt="o">
           <span class="d-md-down-none">admin</span>
           </span>
         </a>
         <Dropdown-menu slot="list">
-            <Dropdown-item>
-              <p class="dropdown-itemp"><Icon type="alert"></Icon>Updates<span class="badge badge-info">42</span></p>
-
-            
-            </Dropdown-item>
-            <Dropdown-item>
-              <p class="dropdown-itemp"><Icon type="chatbox-working"></Icon>Messages<span class="badge badge-success">42</span></p>
-
-            </Dropdown-item>
-             <Dropdown-item>
-              <p class="dropdown-itemp">  <Icon type="chatbox-working"></Icon>Messages<span class="badge badge-danger">42</span></p>
-
-           </Dropdown-item>
+            <!--<Dropdown-item>-->
+              <!--<p class="dropdown-itemp"><Icon type="alert"></Icon>Updates<span class="badge badge-info">42</span></p>-->
+            <!--</Dropdown-item>-->
+            <!--<Dropdown-item>-->
+              <!--<p class="dropdown-itemp"><Icon type="chatbox-working"></Icon>Messages<span class="badge badge-success">42</span></p>-->
+            <!--</Dropdown-item>-->
+             <!--<Dropdown-item>-->
+              <!--<p class="dropdown-itemp">  <Icon type="chatbox-working"></Icon>Messages<span class="badge badge-danger">42</span></p>-->
+           <!--</Dropdown-item>-->
               <Dropdown-item divided>
               <p class="dropdown-itemp"><Icon type="android-contact"></Icon> Profile</p>
 
@@ -108,7 +104,7 @@
               <p class="dropdown-itemp"><Icon type="android-settings"></Icon> Settings</p>
               </Dropdown-item>
 
-                 <Dropdown-item > <a href="" @click="Logout"  ><p  class="dropdown-itemp"><Icon type="power"></Icon>Logout</p></a></Dropdown-item>
+            <Dropdown-item > <a href="" @click="Logout"  ><p  class="dropdown-itemp"><Icon type="power"></Icon>Logout</p></a></Dropdown-item>
 
         </Dropdown-menu>
     </Dropdown>
@@ -136,7 +132,7 @@ export default {
          this.$store.dispatch('LogOut').then(() => {
                 this.$router.push({ path: '/login' });
               }).catch(err => {
-                this.$message.error(err);
+                this.$Message.error(err);
               });
     },
     click () {

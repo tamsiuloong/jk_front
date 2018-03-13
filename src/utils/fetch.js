@@ -20,12 +20,23 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   
   // Do something before request is sent
+  console.log(store.getters.token);
   if (store.getters.token) {
-    config.headers['access_token'] = store.getters.token; // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+    // config.headers['access_token'] = store.getters.token; // 让每个请求携带token--['X-Token']为自定义key 请根据实际情况自行修改
+    var params = config.params;
+    if(!params){
+      config.params=
+      {
+        "access_token":store.getters.token  //让每个请求携带参数access_token
+      }
+    }
+    else {
+      params.access_token = store.getters.token;//追加
+    }
+
+
   }
-  // else{
-  //   config.headers['authorization']="Basic amtfZnJvbnQ6MTIzNDU2";
-  // }
+
   return config;
 }, error => {
   // Do something with request error

@@ -6,28 +6,26 @@ import { asyncRouterMap, constantRouterMap } from 'src/router';
  * @param route
  */
 function hasPermission(roles, route) {
-  // if (route.meta && route.meta.role) {
-  //   return roles.some(role => route.meta.role.indexOf(role) >= 0)
-  // } else {
-  //   return true
-  // }
+
+    if (route.name && roles) {
+        return roles.some(role => route.name.indexOf(role) >= 0)
+    } else {
+        return true
+    }
+
   //   if(roles&&route){
-  //       // roles.forEach(function(role,k){
-  //       //     if(route.indexOf(role)!=-1)
-  //       //     {
-  //       //         return true;
-  //       //     }
-  //       // });
   //       for(let i = 0 ;i < roles.length;i++)
   //       {
   //           if(roles[i]===route.name)
   //           {
-  //
+  //               return true;
   //           }
-            return true;
+  //
   //       }
   //   }
   //   return false;
+
+    return true;
 }
 
 /**
@@ -106,9 +104,9 @@ const permission = {
         const { roles } = data
         let accessedRouters
         // if (roles.indexOf('admin') >= 0) {
-          accessedRouters = asyncRouterMap
+        //   accessedRouters = asyncRouterMap
         // } else {
-        //   accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
+          accessedRouters = filterAsyncRouter(asyncRouterMap, roles)
         // }
 
 

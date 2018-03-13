@@ -24,11 +24,10 @@ export function logout() {
   });
 }
 
-export function getInfo(access_token) {
+export function getInfo() {
   return fetch({
     url: '/user/info',
-    method: 'get',
-    params: { access_token }
+    method: 'get'
   });
 }
 

@@ -16,8 +16,8 @@
         <Form-item>
             <Button type="primary" @click="handleLogin('loginForm')" long>登录</Button>
         </Form-item>
-        <div class='tips'>admin账号为:admin@wz.com 密码123456</div>
-            <div class='tips'>editor账号:editor@wz.com 密码123456</div>
+        <!--<div class='tips'>admin账号为:admin@wz.com 密码123456</div>-->
+            <!--<div class='tips'>editor账号:editor@wz.com 密码123456</div>-->
            </Form>
 
     </div>
@@ -45,8 +45,8 @@
         };
         return {
           loginForm: {
-            username: 'bill',
-            password: 'abc123'
+            username: 'cgx',
+            password: '111111'
           },
           loginRules: {
             username: [
@@ -116,7 +116,7 @@
                 this.loading = false;
                 this.$router.push({ path: '/' });
               }).catch(err => {
-                this.$message.error(err);
+                this.$Message.error(err.response.status===400?"用户名/密码错误":"登陆失败!");
                 this.loading = false;
               });
             } else {

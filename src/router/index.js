@@ -155,23 +155,41 @@ export const asyncRouterMap = [
         component: Full2,
         hidden: false,
         children: [
-            {path: '/system/dept', name: '部门管理', icon: 'speedometer', component: _import('system/Dept')},
-            {path: '/system/user', name: '用户管理', icon: 'thumbsup', component: _import('system/User')},
-            {path: '/system/role', name: '角色管理', icon: 'thumbsup', component: _import('system/Role')},
-            {path: '/system/module', name: '模块管理', icon: 'thumbsup', component: _import('system/Module')}
+            {path: '/system/dept', name: '部门管理', icon: 'person-stalker', component: _import('system/Dept')},
+            {path: '/system/user', name: '用户管理', icon: 'person', component: _import('system/User')},
+            {path: '/system/role', name: '角色管理', icon: 'android-hand', component: _import('system/Role')},
+            {path: '/system/module', name: '模块管理', icon: 'eye', component: _import('system/Module')}
 
         ]
     },
     {
-        path: '/home1',
-        redirect: '/home1/introduction',
-        name: '首页2',
+        path: '/cargo',
+        redirect: '/cargo/contract',
+        name: '货运管理',
         component: Full2,
         hidden: false,
         children: [
-            {path: '/home1/dashboard', name: 'Dashboard2', icon: 'speedometer', component: _import('Dashboard2')},
-            {path: '/home1/introduction', name: '介绍2', icon: 'thumbsup', component: _import('Introduction')}
+            {path: '/cargo/contract', name: '购销合同', icon: 'speedometer', component: _import('cargo/Contract')},
+            {path: '/cargo/outProduct', name: '出货表', icon: 'speedometer', component: _import('cargo/OutProduct')},
+            {path: '/cargo/export_contract', name: '合同管理', icon: 'speedometer', component: _import('cargo/ExportContract')},
+            {path: '/cargo/export', name: '出口报运', icon: 'speedometer', component: _import('cargo/Export')},
+            {path: '/cargo/packingList', name: '装箱管理', icon: 'speedometer', component: _import('cargo/PackingList')},
+            {path: '/cargo/shippingOrder', name: '委托管理', icon: 'speedometer', component: _import('cargo/ShippingOrder')},
+            {path: '/cargo/invoice', name: '发票管理', icon: 'speedometer', component: _import('cargo/Invoice')},
+            {path: '/cargo/finance', name: '财务管理', icon: 'speedometer', component: _import('cargo/Finance')}
 
+        ]
+    },
+    {
+        path: '/stat',
+        redirect: '/stat/factorysale',
+        name: '货运管理',
+        component: Full2,
+        hidden: false,
+        children: [
+            {path: '/stat/factorysale', name: '生产厂家销售情况', icon: 'speedometer', component: _import('charts/SaleChart')},
+            {path: '/stat/productsale', name: '产品销售排行', icon: 'speedometer', component: _import('charts/ShopChart')},
+            {path: '/stat/onlineinfo', name: '系统访问压力图', icon: 'speedometer', component: _import('charts/CakeChart')}
         ]
     },
 

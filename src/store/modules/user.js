@@ -71,7 +71,7 @@ const user = {
           console.log(response.data);
           Cookies.set('Admin-Token', body.access_token);
           commit('SET_TOKEN', body.access_token);
-          commit('SET_EMAIL', access_token);
+          commit('SET_EMAIL', body.access_token);
           resolve();
         }).catch(error => {
           reject(error);
@@ -83,7 +83,7 @@ const user = {
     // 获取用户信息
     GetInfo({ commit, state }) {
       return new Promise((resolve, reject) => {
-        getInfo(state.token).then(response => {
+        getInfo().then(response => {
           const data = response.data.body;
           commit('SET_ROLES', data.permissions);
           commit('SET_NAME', data.name);
@@ -102,8 +102,8 @@ const user = {
       return new Promise((resolve, reject) => {
         commit('SET_CODE', code);
         loginByThirdparty(state.status, state.username, state.code, state.auth_type).then(response => {
-          commit('SET_TOKEN', response.data.token);
-          Cookies.set('Admin-Token', response.data.token);
+          commit('SET_TOKEN', response.data.access_token);
+          Cookies.set('Admin-Token', response.data.access_token);
           resolve();
         }).catch(error => {
           reject(error);

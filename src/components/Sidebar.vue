@@ -6,7 +6,7 @@
     </nav>
   </div>
 </template>
-<script>
+<script type="text/ecmascript-6">
    import SidebarItem from './SidebarItem';
 import { mapGetters } from 'vuex';
 export default {
