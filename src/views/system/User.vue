@@ -13,8 +13,7 @@
         <Modal
                 v-model="modal1"
                 title="编辑用户"
-                @on-ok="update"
-                @on-cancel="cancel" width="60%">
+                 width="60%">
             <Form ref="updateForm" :model="updateForm" :rules="ruleCustom" :label-width="80">
                 <Row>
                     <Col span="11">
@@ -129,14 +128,22 @@
                     </FormItem>
                     </Col>
                 </Row>
+                <Row>
+                    <Col span="24">
 
+                    <FormItem  >
+                        <Button type="primary" @click="update">保存</Button>
+                        <Button type="ghost" @click="reset('updateForm')">清空</Button>
+                    </FormItem>
+
+                    </Col>
+                </Row>
             </Form>
         </Modal>
         <Modal
                 v-model="modal2"
                 title="添加用户"
-                @on-ok="add"
-                @on-cancel="cancel" width="60%">
+                 width="60%">
             <Form ref="addForm" :model="addForm" :rules="ruleCustom" :label-width="80">
                 <Row>
                     <Col span="11">
@@ -251,7 +258,16 @@
                     </FormItem>
                     </Col>
                 </Row>
+                <Row>
+                    <Col span="24">
 
+                    <FormItem  >
+                        <Button type="primary" @click="add()">保存</Button>
+                        <Button type="ghost" @click="reset('addForm')">清空</Button>
+                    </FormItem>
+
+                    </Col>
+                </Row>
             </Form>
         </Modal>
 
@@ -491,14 +507,17 @@
                 },
                 ruleCustom: {
                     userName: [
-                        { validator: validateUser, trigger: 'blur' }
-                    ],
-                    state: [
-                        { validator: notEmpty, trigger: 'blur' }
+                        { required: true,message:'cannot be empty', trigger: 'blur' }
                     ]
-// ,
+//                    userName: [
+//                        { validator: validateUser, trigger: 'blur' }
+//                    ],
+//                    state: [
+//                        { validator: notEmpty, trigger: 'blur' }
+//                    ]
+//                    ,
 //                    'userInfo.name':[
-//                        { validator: validateName, trigger: 'blur' }
+//                        { validator: notEmpty, trigger: 'blur' }
 //                    ],
 //                    'userInfo.salary':[
 //                        { validator: notEmpty, trigger: 'blur' }
@@ -555,14 +574,18 @@
             }
         },
         methods: {
+
+            reset(form){
+                this.$refs[form].resetFields();
+            },
             addUser(){
                 this.modal2=true;
                 this.$refs['addForm'].resetFields();
             },
             add(){
-//                this.$refs['addForm'].validate((valid)=>{
-//                    if(valid)
-//                    {
+                this.$refs['addForm'].validate((valid)=>{
+                    if(valid)
+                    {
                         const addForm = this.addForm;
                         fetch({
                             url: '/system/user',
@@ -572,11 +595,11 @@
                             this.data1.unshift(result.data);
                             this.$Message.success('Success!');
                         });
-//                    }
-//                    else{
-//                        this.$Message.error('表单验证失败!');
-//                    }
-//                });
+                    }
+                    else{
+                        this.$Message.error('表单验证失败!');
+                    }
+                });
 
             },
 
