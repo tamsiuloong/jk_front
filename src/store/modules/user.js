@@ -86,9 +86,9 @@ const user = {
         getInfo().then(response => {
           const data = response.data.body;
           commit('SET_ROLES', data.permissions);
-          commit('SET_NAME', data.name);
+          commit('SET_NAME', data.userName);
           commit('SET_AVATAR', data.avatar);
-          commit('SET_UID', data.uid);
+          commit('SET_UID', data.id);
           commit('SET_INTRODUCTION', data.introduction);
           resolve(response);
         }).catch(error => {
