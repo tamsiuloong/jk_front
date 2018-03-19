@@ -2,7 +2,7 @@
   <section class="todoapp">
     <!-- header -->
     <header class="header">
-      <input class="new-todo" autofocus autocomplete="off" placeholder="TODO LIST (input sth here)" @keyup.enter="addTodo">
+      <input class="new-todo" autofocus autocomplete="off" placeholder="你要做点啥？" @keyup.enter="addTodo">
 
     </header>
     <!-- main section -->
@@ -32,7 +32,7 @@
   </section>
 </template>
 
-<script>
+<script type="text/ecmascript-6">
 import Todo from './Todo.vue'
 
 const STORAGE_KEY = 'todos'
@@ -42,14 +42,15 @@ const filters = {
   completed: todos => todos.filter(todo => todo.done)
 }
 const defalutList = [
-{ text: '吾日七省吾身', done: false },
-  { text: 'star this repository  (给这个项目点星了吗？)', done: false },
-  { text: 'fork this repository  (fork这个项目了吗？)', done: false },
-  { text: 'follow author         (关注这个作者了吗？)', done: false },
-  { text: 'read blogs            (阅读教程了吗？)', done: false },
-  { text: 'use and learn         (学到新东西了吗？)', done: false },
-  { text: 'make a cool project?  (搞了一个牛项目吗？)', done: false },
-   { text: 'are you a single dog?(是不是女朋友丢了？)', done: false },
+{ text: '言出必行，言出必准', done: false },
+  { text: '坚持灵活，灵活坚持', done: false },
+  { text: '没有两个人是一样的', done: false },
+  { text: '只要思想不滑坡，办法总比困难多', done: false },
+  { text: '一个人不能改变另一个人', done: false },
+  { text: '有效比有道理更重要', done: false },
+  { text: '重复旧的做法，只会得到旧的结果', done: false },
+  { text: '没有挫败，只有回应信息', done: false },
+  { text: '凡事必有至少三个解决方法', done: false }
 ]
 export default {
   components: { Todo },

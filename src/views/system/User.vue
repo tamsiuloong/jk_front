@@ -129,15 +129,15 @@
                     </Col>
                 </Row>
                 <Row>
-                    <Col span="24">
+                <Col span="24">
 
-                    <FormItem  >
-                        <Button type="primary" @click="update">保存</Button>
-                        <Button type="ghost" @click="reset('updateForm')">清空</Button>
-                    </FormItem>
+                <FormItem  >
+                    <Button type="primary" @click="update">保存</Button>
+                    <Button type="ghost" @click="reset('updateForm')">清空</Button>
+                </FormItem>
 
-                    </Col>
-                </Row>
+                </Col>
+            </Row>
             </Form>
         </Modal>
         <Modal
@@ -574,7 +574,6 @@
             }
         },
         methods: {
-
             reset(form){
                 this.$refs[form].resetFields();
             },

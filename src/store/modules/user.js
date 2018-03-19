@@ -97,19 +97,7 @@ const user = {
       });
     },
 
-    // 第三方验证登录
-    LoginByThirdparty({ commit, state }, code) {
-      return new Promise((resolve, reject) => {
-        commit('SET_CODE', code);
-        loginByThirdparty(state.status, state.username, state.code, state.auth_type).then(response => {
-          commit('SET_TOKEN', response.data.access_token);
-          Cookies.set('Admin-Token', response.data.access_token);
-          resolve();
-        }).catch(error => {
-          reject(error);
-        });
-      });
-    },
+
 
 
     // 登出
