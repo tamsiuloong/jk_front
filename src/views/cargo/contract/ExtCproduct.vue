@@ -3,10 +3,11 @@
         <div>
             <ul>
                 <li>
+
                     <Button type="primary" icon="plus-round" @click="addContractProduct()">新建</Button>
                     <Button type="success" icon="wrench" @click="edit()">修改</Button>
                     <Button type="error" icon="trash-a" @click="remove()">删除</Button>
-                    <Button type="info" icon="arrow-left-c" @click="e=>{this.$router.go(-1)}">返回</Button>
+                    <Button type="info" icon="arrow-left-c" @click="()=>{this.$router.go(-1)}">返回</Button>
                 </li>
                 <li>
                     <div style="padding: 10px 0;">
@@ -26,7 +27,7 @@
 
         <Modal
                 v-model="modal1"
-                title="编辑购销合同货物"
+                title="编辑购销合同货物-附件"
                 width="60%">
             <Form ref="updateForm" :model="updateForm" :rules="ruleCustom" :label-width="80">
                 <Row>
@@ -57,19 +58,6 @@
                             <Radio label="PCS" >只</Radio>
                             <Radio label="SETS">套</Radio>
                         </Radio-group>
-                    </FormItem>
-                    </Col>
-                </Row>
-                <Row>
-                    <Col span="11">
-                    <FormItem label="装率" prop="loadingRate">
-                        <Input type="text" v-model="updateForm.loadingRate"/>
-                    </FormItem>
-                    </Col>
-                    <Col span="2" style="text-align: center"/>
-                    <Col span="11">
-                    <FormItem label="箱数" prop="boxNum">
-                        <Input type="text" v-model="updateForm.boxNum"/>
                     </FormItem>
                     </Col>
                 </Row>
@@ -112,13 +100,13 @@
         </Modal>
         <Modal
                 v-model="modal2"
-                title="添加购销合同货物"
+                title="添加购销合同货物-附件"
                 width="60%">
             <Form ref="addForm" :model="addForm" :rules="ruleCustom" :label-width="80">
                 <Row>
                     <Col span="11">
                     <FormItem label="生产厂家" prop="factory.id">
-                        <Select v-model="addForm.factory.id" filterable @on-change="o=>changeFactory(this.addForm,o)" label-in-value=true>
+                        <Select v-model="addForm.factory.id" filterable @on-change="o=>changeFactory(this.addForm,o)" label-in-value="true">
                             <Option v-for="item in factoryList" :value="item.id" :key="item.id" >{{ item.factoryName }}</Option>
                         </Select>
                     </FormItem>
@@ -207,7 +195,7 @@
         data() {
             const validateUser = (rule, value, callback) => {
                 if (value === '') {
-                    callback(new Error('请输入购销合同货物名'));
+                    callback(new Error('请输入购销合同货物-附件名'));
                 }
             };
             const validateAddr = (rule, value, callback) => {
@@ -233,7 +221,7 @@
                 }, 1000);
             };
             return {
-                contractId:null,
+                contractProductId:null,
                 count: 0,
                 gourpId: null,
                 tempIndex: 0,
@@ -256,15 +244,6 @@
                         key: 'productNo'
                     },
                     {
-                        title: '装率',
-                        key: 'loadingRate'
-                    },
-                    {
-                        title: '箱数',
-                        width: 90,
-                        key: 'boxNum'
-                    },
-                    {
                         title: '包装单位',
                         key: 'packingUnit'
                     },
@@ -279,29 +258,6 @@
                     {
                         title: '总金额',
                         key: 'amount'
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.$router.push({path:'/cargo/extCproduct/'+(this.data1[params.index].id)})
-                                        }
-                                    }
-                                }, '附件')
-                            ]);
-                        }
                     }
                 ],
                 self: this,
@@ -312,15 +268,13 @@
                     factory: {
                         id:""
                     },
-                    contract:{
+                    contractProduct:{
                         id:""
                     },
                     factoryName:"",
                     productNo:"",
                     productImage:"",
                     productDesc:"",
-                    loadingRate:"",
-                    boxNum:"",
                     packingUnit:"",
                     cnumber:"",
                     outNumber:"",
@@ -334,15 +288,13 @@
                     factory: {
                         id:""
                     },
-                    contract:{
+                    contractProduct:{
                         id:""
                     },
                      factoryName:"",
                      productNo:"",
                      productImage:"",
                      productDesc:"",
-                     loadingRate:"",
-                     boxNum:"",
                      packingUnit:"",
                      cnumber:"",
                      outNumber:"",
@@ -353,7 +305,7 @@
                      orderNo:""
                 },
                 ruleCustom: {
-                    contractProductName: [
+                    extCproductName: [
                         {validator: validateUser, trigger: 'blur'}
                     ],
                     id: [
@@ -373,13 +325,13 @@
                 this.modal2 = true;
             },
             add(){
-                this.addForm.contract.id = this.contractId;
-                const contractProduct = this.addForm;
+                this.addForm.contractProduct.id = this.contractProductId;
+                const extCproduct = this.addForm;
 
                 fetch({
-                    url: '/cargo/contractProduct',
+                    url: '/cargo/extCproduct',
                     method: 'post',
-                    data: contractProduct
+                    data: extCproduct
                 }).then((result) => {
 //                    this.data1.push(result.data);
                     this.gopage(this.pageNo);
@@ -387,12 +339,6 @@
                     this.$Message.success('Success!');
                     this.modal2 = false;
                 });
-            },
-            show (index) {
-                this.$Modal.info({
-                    title: '购销合同货物信息',
-                    content: `姓名：${this.data1[index].contractProductName}`
-                })
             },
             change(e){
                 if (e.length == 1) {
@@ -427,7 +373,7 @@
             remove () {
                 if (this.groupId != null && this.groupId != "") {
                     fetch({
-                        url: '/cargo/contractProduct',
+                        url: '/cargo/extCproduct',
                         method: 'delete',
                         data: this.groupId
                     }).then((result) => {
@@ -443,7 +389,7 @@
             },
             update () {
                 fetch({
-                    url: '/cargo/contractProduct',
+                    url: '/cargo/extCproduct',
                     method: 'put',
                     data: this.updateForm
                 }).then((result) => {
@@ -458,11 +404,11 @@
             },
             gopage(pageNo){
                 const pageSize = this.pageSize;
-                const contractId = this.contractId;
+                const contractProductId = this.contractProductId;
                 fetch({
-                    url: '/cargo/contractProduct',
+                    url: '/cargo/extCproduct',
                     method: 'get',
-                    params: {pageNo, pageSize,contractId}
+                    params: {pageNo, pageSize,contractProductId}
                 }).then((result) => {
                     this.data1 = result.data.list;
                     this.pageNo = pageNo;
@@ -473,14 +419,14 @@
         },
         mounted: function () {
             //接受url参数
-            this.contractId = this.$route.params.id;
+            this.contractProductId = this.$route.params.id;
             this.gopage(this.pageNo);
 
             //初始化部门列表
             fetch({
                 url:'/cargo/factory/getAll',
                 method:'get',
-                params:{cType:"货物"}
+                params:{cType:"附件"}
             }).then((result)=>{
                 this.factoryList = result.data;
             })
