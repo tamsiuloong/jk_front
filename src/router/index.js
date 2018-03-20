@@ -170,6 +170,7 @@ export const asyncRouterMap = [
         hidden: false,
         children: [
             {path: '/cargo/contract', name: '购销合同', icon: 'speedometer', component: _import('cargo/contract/Contract')},
+            {path: '/cargo/contractProduct/:id', name: '购销合同货物', hidden: true, component: _import('cargo/contract/ContractProduct')},
             {path: '/cargo/outProduct', name: '出货表', icon: 'speedometer', component: _import('cargo/OutProduct')},
             {path: '/cargo/export_contract', name: '合同管理', icon: 'speedometer', component: _import('cargo/ExportContract')},
             {path: '/cargo/export', name: '出口报运', icon: 'speedometer', component: _import('cargo/Export')},
@@ -183,7 +184,7 @@ export const asyncRouterMap = [
     {
         path: '/stat',
         redirect: '/stat/factorysale',
-        name: '货运管理',
+        name: '统计分析',
         component: Full2,
         hidden: false,
         children: [
