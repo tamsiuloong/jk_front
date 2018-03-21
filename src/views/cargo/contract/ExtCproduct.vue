@@ -3,7 +3,6 @@
         <div>
             <ul>
                 <li>
-
                     <Button type="primary" icon="plus-round" @click="addContractProduct()">新建</Button>
                     <Button type="success" icon="wrench" @click="edit()">修改</Button>
                     <Button type="error" icon="trash-a" @click="remove()">删除</Button>

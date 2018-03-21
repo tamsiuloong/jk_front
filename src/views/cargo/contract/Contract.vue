@@ -16,6 +16,8 @@
                     <Button type="primary" icon="plus-round" @click="addContract()">新建</Button>
                     <Button type="success" icon="wrench" @click="edit()">修改</Button>
                     <Button type="error" icon="trash-a" @click="remove()">删除</Button>
+                    <Button type="warning"  @click="submit()">提交</Button>
+                    <Button type="info"  @click="cancel()">取消</Button>
                 </li>
                 <li>
                     <div style="padding: 10px 0;">
@@ -559,7 +561,7 @@
             gopage(pageNo){
                 const pageSize = this.pageSize;
                 fetch({
-                    url: '/cargo/contract',
+                    url: '/cargo/contract/all',
                     method: 'get',
                     params: {pageNo, pageSize}
                 }).then((result) => {
@@ -568,6 +570,38 @@
                     this.pageSize = pageSize;
                     this.totalCount = result.data.totalCount;
                 });
+            },
+            submit(){
+                if (this.groupId != null && this.groupId != "") {
+                    fetch({
+                        url: '/cargo/contract/submit',
+                        method: 'put',
+                        data: this.groupId
+                    }).then((result) => {
+                        if (result.data == '1') {
+                            this.$Message.success('Success!');
+                            this.gopage(this.pageNo);
+                        }
+                    });
+                } else {
+                    this.$Message.warning('请至少选择一项');
+                }
+            },
+            cancel(){
+                if (this.groupId != null && this.groupId != "") {
+                    fetch({
+                        url: '/cargo/contract/cancel',
+                        method: 'put',
+                        data: this.groupId
+                    }).then((result) => {
+                        if (result.data == '1') {
+                            this.$Message.success('Success!');
+                            this.gopage(this.pageNo);
+                        }
+                    });
+                } else {
+                    this.$Message.warning('请至少选择一项');
+                }
             }
         },
         mounted: function () {

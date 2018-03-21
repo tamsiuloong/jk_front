@@ -75,12 +75,12 @@ service.interceptors.response.use(
 //       return response.data;
 //     }
   error => {
-    console.log('err' + error);// for debug
-      // vm.$Message.error({
-      //               message: error.message,
-      //               duration: 5 * 1000,
-      //               closable: true
-      //           });
+    // console.log('err' + error);// for debug
+    //   vm.$Message.error({
+    //                 message: error.message,
+    //                 duration: 5 * 1000,
+    //                 closable: true
+    //             });
     return Promise.reject(error);
   }
 )
