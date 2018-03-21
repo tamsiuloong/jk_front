@@ -198,11 +198,7 @@
                         render: function (h, params) {
                             return h('div', dateFormat(this.row.shipTime))
                         }
-                    }/*,
-                     {
-                     title: '贸易条款',
-                     key: 'tradeTerms'
-                     }*/,
+                    },
                     {
                         title: '总金额',
                         width: 80,
@@ -226,29 +222,6 @@
                             else {
                                 return "unkown"
                             }
-                        }
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.$router.push({path:'/cargo/contractProduct/'+(this.data1[params.index].id) })
-                                        }
-                                    }
-                                }, '货物')
-                            ]);
                         }
                     }
                 ],

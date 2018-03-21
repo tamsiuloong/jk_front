@@ -9,6 +9,7 @@ function hasPermission(roles, route) {
 
     if (route.name && roles) {
         return roles.some(role => route.name.indexOf(role) >= 0)
+        // return roles.some(role => route.name==role)
     } else {
         return true
     }
