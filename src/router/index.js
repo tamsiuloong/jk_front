@@ -45,156 +45,102 @@ export const asyncRouterMap = [
         hidden: false,
         children: [
             {path: '/welcome', name: '欢迎', icon: 'speedometer', component: _import('Welcome')},
-            {path: '/introduction', name: '介绍', icon: 'thumbsup', component: _import('Introduction')},
-            {
-                path: '/components', name: 'component组件', redirect: '/components/buttons', icon: 'bookmark',
+            {path: '/system', name: '系统管理', icon: 'person-stalker',
                 component: {
                     render(c) {
                         return c('router-view')
                     }
                 },
-                children: [{
-                    path: 'buttons',
-                    name: 'Buttons按钮',
-                    icon: 'social-youtube',
-                    component: _import('components/Buttons'),
-                    hidden: false
-                },
-                    {path: 'hoverbuttons', name: '悬停特效按钮', icon: 'wand', component: _import('components/HoverButtons')},
-                    {path: 'alert', name: 'Alert警告提示', icon: 'alert', component: _import('components/Alert')},
-                    {path: 'card', name: 'Card卡片', icon: 'ios-browsers-outline', component: _import('components/Card')},
-                    {
-                        path: 'datepicker',
-                        name: 'DatePicker',
-                        icon: 'ios-calendar-outline',
-                        component: _import('components/DatePicker')
-                    },
-                    {path: 'form', name: 'Form表单', icon: 'ios-list-outline', component: _import('components/Form')},
-                    {
-                        path: 'modal',
-                        name: 'Modal对话框',
-                        icon: 'ios-chatbubble-outline',
-                        component: _import('components/Modal')
-                    },
-                    {
-                        path: 'select',
-                        name: 'Select选择器',
-                        icon: 'ios-arrow-down',
-                        component: _import('components/Select')
-                    },
-                    {path: 'spin', name: 'Spin加载中', icon: 'load-d ', component: _import('components/Spin')},
-                    {
-                        path: 'steps',
-                        name: 'Steps步骤条',
-                        icon: 'ios-checkmark-outline',
-                        component: _import('components/Steps')
-                    },
-                    {
-                        path: 'timeline',
-                        name: 'Timeline时间轴',
-                        icon: 'android-more-vertical',
-                        component: _import('components/Timeline')
-                    },
-                    {
-                        path: 'transfer',
-                        name: 'Transfer穿梭框',
-                        icon: 'ios-pause-outline',
-                        component: _import('components/Transfer')
-                    },
-                    {
-                        path: 'timepicker',
-                        name: 'Timepicker',
-                        icon: 'ios-clock-outline',
-                        component: _import('components/Timepicker')
-                    },
-                    {
-                        path: 'upload',
-                        name: 'Upload上传',
-                        icon: 'ios-cloud-upload-outline',
-                        component: _import('components/Upload')
-                    }
+                children: [
+                    {path: 'dept', name: '部门管理', icon: 'person-stalker', component: _import('system/Dept')},
+                    {path: 'user', name: '用户管理', icon: 'person', component: _import('system/User')},
+                    {path: 'role', name: '角色管理', icon: 'android-hand', component: _import('system/Role')},
+                    {path: 'module', name: '模块管理', icon: 'eye', component: _import('system/Module')}
                 ]
             },
-            {
-                path: '/charts', name: 'echart图表', redirect: '/charts/shopchart', icon: 'pie-graph',
+            {path: '/cargo', name: '货运管理',  icon: 'navigate',
                 component: {
                     render(c) {
                         return c('router-view')
                     }
                 },
-                children: [{
-                    path: 'shopchart',
-                    name: '商场统计图表',
-                    icon: 'stats-bars',
-                    component: _import('charts/ShopChart'),
-                    hidden: false
-                },
+                children: [
                     {
-                        path: 'radarchart',
-                        name: '雷达图',
-                        icon: 'arrow-graph-up-right',
-                        component: _import('charts/RadarChart')
+                        path: 'contract', name: '购销合同',  component: _import('cargo/contract/Contract')
                     },
-                    {path: 'cakechart', name: '蛋糕销量图表', icon: 'ios-analytics', component: _import('charts/CakeChart')}
+                    {path: 'contractProduct/:id', name: '购销合同货物', hidden: true, component: _import('cargo/contract/ContractProduct')},
+                    {path: 'extCproduct/:id', name: '购销合同货物附件', hidden: true, component: _import('cargo/contract/ExtCproduct')},
+                    {path: 'outProduct', name: '出货表',  component: _import('cargo/OutProduct')},
+                    {path: 'export_contract', name: '合同管理',  component: _import('cargo/export/ExportContract')},
+                    {path: 'export', name: '出口报运',  component: _import('cargo/export/Export')},
+                    {path: 'exportEdit/:id', name: '修改出口报运',hidden: true,  component: _import('cargo/export/ExportEdit')},
+                    {path: 'packingList', name: '装箱管理',  component: _import('cargo/PackingList')},
+                    {path: 'shippingOrder', name: '委托管理',  component: _import('cargo/ShippingOrder')},
+                    {path: 'invoice', name: '发票管理',  component: _import('cargo/Invoice')},
+                    {path: 'finance', name: '财务管理',  component: _import('cargo/Finance')}
                 ]
             },
-            {path: '/table', name: '表格综合实例', icon: 'ios-paper', component: _import('Table'), meta: {role: ['admin']}},
-            {path: '/jsontree', name: 'JSON视图', icon: 'merge', component: _import('JsonTree')},
-            {path: '/tabledetail/:id', name: 'TableDetail', hidden: true, component: _import('TableDetail')},
-            {path: '/tinymce', name: 'Tinymce编辑器', icon: 'android-document', component: _import('Tinymce')},
-            {path: '/markdown', name: 'Markdown', icon: 'android-list', component: _import('Markdown')},
-            {path: '/crud', name: 'Crud', icon: 'android-list', component: _import('Crud')},
-            {path: '/elementui', name: 'elementUI', icon: 'android-list', component: _import('ElementUI')}
+            {path: '/stat', name: '统计分析', redirect: '/stat/factorysale', icon: 'speedometer',
+                component: {
+                    render(c) {
+                        return c('router-view')
+                    }
+                },
+                children: [
+                    {path: 'factorysale', name: '厂家销售情况',  component: _import('charts/SaleChart')},
+                    {path: 'productsale', name: '产品销售排行',  component: _import('charts/ShopChart')},
+                    {path: 'onlineinfo', name: '系统访问压力',  component: _import('charts/CakeChart')}
+                ]
+            }
 
         ]
     },
-    {
-        path: '/system',
-        redirect: '/system/dept',
-        name: '系统管理',
-        component: Full2,
-        hidden: false,
-        children: [
-            {path: '/system/dept', name: '部门管理', icon: 'person-stalker', component: _import('system/Dept')},
-            {path: '/system/user', name: '用户管理', icon: 'person', component: _import('system/User')},
-            {path: '/system/role', name: '角色管理', icon: 'android-hand', component: _import('system/Role')},
-            {path: '/system/module', name: '模块管理', icon: 'eye', component: _import('system/Module')}
-
-        ]
-    },
-    {
-        path: '/cargo',
-        redirect: '/cargo/contract',
-        name: '货运管理',
-        component: Full2,
-        hidden: false,
-        children: [
-            {path: '/cargo/contract', name: '购销合同', icon: 'speedometer', component: _import('cargo/contract/Contract')},
-            {path: '/cargo/contractProduct/:id', name: '购销合同货物', hidden: true, component: _import('cargo/contract/ContractProduct')},
-            {path: '/cargo/extCproduct/:id', name: '购销合同货物附件', hidden: true, component: _import('cargo/contract/ExtCproduct')},
-            {path: '/cargo/outProduct', name: '出货表', icon: 'speedometer', component: _import('cargo/OutProduct')},
-            {path: '/cargo/export_contract', name: '合同管理', icon: 'speedometer', component: _import('cargo/export/ExportContract')},
-            {path: '/cargo/export', name: '出口报运', icon: 'speedometer', component: _import('cargo/export/Export')},
-            {path: '/cargo/exportEdit/:id', name: '修改出口报运',hidden: true, icon: 'speedometer', component: _import('cargo/export/ExportEdit')},
-            {path: '/cargo/packingList', name: '装箱管理', icon: 'speedometer', component: _import('cargo/PackingList')},
-            {path: '/cargo/shippingOrder', name: '委托管理', icon: 'speedometer', component: _import('cargo/ShippingOrder')},
-            {path: '/cargo/invoice', name: '发票管理', icon: 'speedometer', component: _import('cargo/Invoice')},
-            {path: '/cargo/finance', name: '财务管理', icon: 'speedometer', component: _import('cargo/Finance')}
-
-        ]
-    },
-    {
-        path: '/stat',
-        redirect: '/stat/factorysale',
-        name: '统计分析',
-        component: Full2,
-        hidden: false,
-        children: [
-            {path: '/stat/factorysale', name: '生产厂家销售情况', icon: 'speedometer', component: _import('charts/SaleChart')},
-            {path: '/stat/productsale', name: '产品销售排行', icon: 'speedometer', component: _import('charts/ShopChart')},
-            {path: '/stat/onlineinfo', name: '系统访问压力图', icon: 'speedometer', component: _import('charts/CakeChart')}
-        ]
-    },
+    // {
+    //     path: '/system',
+    //     redirect: '/system/dept',
+    //     name: '系统管理',
+    //     component: Full2,
+    //     hidden: false,
+    //     children: [
+    //         {path: '/system/dept', name: '部门管理', icon: 'person-stalker', component: _import('system/Dept')},
+    //         {path: '/system/user', name: '用户管理', icon: 'person', component: _import('system/User')},
+    //         {path: '/system/role', name: '角色管理', icon: 'android-hand', component: _import('system/Role')},
+    //         {path: '/system/module', name: '模块管理', icon: 'eye', component: _import('system/Module')}
+    //
+    //     ]
+    // },
+    // {
+    //     path: '/cargo',
+    //     redirect: '/cargo/contract',
+    //     name: '货运管理',
+    //     component: Full2,
+    //     hidden: false,
+    //     children: [
+    //         {path: '/cargo/contract', name: '购销合同', icon: 'speedometer', component: _import('cargo/contract/Contract')},
+    //         {path: '/cargo/contractProduct/:id', name: '购销合同货物', hidden: true, component: _import('cargo/contract/ContractProduct')},
+    //         {path: '/cargo/extCproduct/:id', name: '购销合同货物附件', hidden: true, component: _import('cargo/contract/ExtCproduct')},
+    //         {path: '/cargo/outProduct', name: '出货表', icon: 'speedometer', component: _import('cargo/OutProduct')},
+    //         {path: '/cargo/export_contract', name: '合同管理', icon: 'speedometer', component: _import('cargo/export/ExportContract')},
+    //         {path: '/cargo/export', name: '出口报运', icon: 'speedometer', component: _import('cargo/export/Export')},
+    //         {path: '/cargo/exportEdit/:id', name: '修改出口报运',hidden: true, icon: 'speedometer', component: _import('cargo/export/ExportEdit')},
+    //         {path: '/cargo/packingList', name: '装箱管理', icon: 'speedometer', component: _import('cargo/PackingList')},
+    //         {path: '/cargo/shippingOrder', name: '委托管理', icon: 'speedometer', component: _import('cargo/ShippingOrder')},
+    //         {path: '/cargo/invoice', name: '发票管理', icon: 'speedometer', component: _import('cargo/Invoice')},
+    //         {path: '/cargo/finance', name: '财务管理', icon: 'speedometer', component: _import('cargo/Finance')}
+    //     ]
+    // },
+    // {
+    //     path: '/stat',
+    //     redirect: '/stat/factorysale',
+    //     name: '统计分析',
+    //     component: Full2,
+    //     hidden: false,
+    //     children: [
+    //         {path: '/stat/factorysale', name: '生产厂家销售情况', icon: 'speedometer', component: _import('charts/SaleChart')},
+    //         {path: '/stat/productsale', name: '产品销售排行', icon: 'speedometer', component: _import('charts/ShopChart')},
+    //         {path: '/stat/onlineinfo', name: '系统访问压力图', icon: 'speedometer', component: _import('charts/CakeChart')}
+    //     ]
+    // },
 
     {path: '*', redirect: '/pages/404', hidden: true}
 

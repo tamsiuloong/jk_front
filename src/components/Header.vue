@@ -11,61 +11,36 @@
 
     <ul class="nav navbar-nav d-md-down-none">
       
-       <li class="nav-item header-item">
-          <router-link tag="div" to='/'  style="height:55px;" class="nav-link">
-            <p><Icon type="home" size='30' color="#2d8cf0"></Icon></p>
-            <p  style="color:white"> 系统首页 </p>
-          </router-link>
-      </li>
-        <li class="nav-item header-item">
-            <router-link tag="div" to='/system'  style="height:55px;" class="nav-link">
-                <p><Icon type="settings" size='30' color="#2d8cf0"></Icon></p>
-                <p  style="color:white"> 系统管理 </p>
-            </router-link>
-        </li>
-        <li class="nav-item header-item">
-        
-        <router-link tag="div" to='/cargo'  style="height:55px;" class="nav-link">
-            <p><Icon type="navigate" size='30' color="#2d8cf0"></Icon></p>
-            <p  style="color:white"> 货运管理 </p>
-        </router-link> 
-
-
-      </li>
-
-        <li class="nav-item header-item">
-
-            <router-link tag="div" to='/stat'  style="height:55px;" class="nav-link">
-                <p><Icon type="stats-bars" size='30' color="#2d8cf0"></Icon></p>
-                <p  style="color:white"> 统计分析 </p>
-            </router-link>
-
-        </li>
-
-   <!--<li class="nav-item header-item">-->
-        <!--&lt;!&ndash;   &ndash;&gt;-->
-
-        <!--<Dropdown>-->
-      <!--<router-link tag="div" to='/'  style="height:55px;" class="nav-link">-->
-            <!--<p><Icon type="android-cloud" size='30' color="#2d8cf0"></Icon></p>-->
-            <!--<p  style="color:white"> 统计 </p>-->
-        <!--</router-link>-->
-        <!--<DropdownMenu slot="list">-->
-            <!--<DropdownItem>Linux</DropdownItem>-->
-            <!--<DropdownItem>Mac OS X</DropdownItem>-->
-            <!--<DropdownItem>Windows</DropdownItem>-->
-            <!---->
-            <!--<DropdownItem>Core OS</DropdownItem>-->
-        <!--</DropdownMenu>-->
-    <!--</Dropdown>-->
-
+       <!--<li class="nav-item header-item">-->
+          <!--<router-link tag="div" to='/'  style="height:55px;" class="nav-link">-->
+            <!--<p><Icon type="home" size='30' color="#2d8cf0"></Icon></p>-->
+            <!--<p  style="color:white"> 系统首页 </p>-->
+          <!--</router-link>-->
+      <!--</li>-->
+        <!--<li class="nav-item header-item">-->
+            <!--<router-link tag="div" to='/system'  style="height:55px;" class="nav-link">-->
+                <!--<p><Icon type="settings" size='30' color="#2d8cf0"></Icon></p>-->
+                <!--<p  style="color:white"> 系统管理 </p>-->
+            <!--</router-link>-->
+        <!--</li>-->
+        <!--<li class="nav-item header-item">-->
+        <!---->
+        <!--<router-link tag="div" to='/cargo'  style="height:55px;" class="nav-link">-->
+            <!--<p><Icon type="navigate" size='30' color="#2d8cf0"></Icon></p>-->
+            <!--<p  style="color:white"> 货运管理 </p>-->
+        <!--</router-link> -->
 
 
       <!--</li>-->
 
+        <!--<li class="nav-item header-item">-->
 
+            <!--<router-link tag="div" to='/stat'  style="height:55px;" class="nav-link">-->
+                <!--<p><Icon type="stats-bars" size='30' color="#2d8cf0"></Icon></p>-->
+                <!--<p  style="color:white"> 统计分析 </p>-->
+            <!--</router-link>-->
 
-
+        <!--</li>-->
 
 
      
