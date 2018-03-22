@@ -2,51 +2,114 @@
 
 
     <div class="animated fadeIn">
-        <!--<Icon type="android-add"></Icon>-->
-        <div id="container">
-            <Icon type="android-add-circle"></Icon>
-            <i-button type="error" @click="addRole">添加角色</i-button>
+        <div>
+            <Row style="margin-bottom: 25px;">
+                <Col span="8">角色：
+                <Input v-model="name" placeholder="请输入..." style="width:200px"/>
+                </Col>
+                <Col span="8"><Button type="primary" shape="circle" icon="ios-search" @click="gopage()">搜索</Button></Col>
+            </Row>
         </div>
-        <br>
-        <Table :columns="columns1" :data="data1"></Table>
-        <Page :total="totalCount" :page-size="pageSize" :current="pageNo" @on-change="gopage" align="center"></Page>
-        <Modal
-                v-model="modal1"
-                title="编辑角色"
-                @on-ok="update"
-                @on-cancel="cancel" width="60%">
-            <Form ref="updateForm"  :model="updateForm" :rules="ruleCustom" :label-width="80">
-                <Input type="hidden" v-model="updateForm.id"/>
-                <FormItem label="角色名字" prop="name">
-                    <Input type="text" v-model="updateForm.name"/>
-                </FormItem>
-                <!--<FormItem label="权限" prop="moduleIds">-->
-                    <!--<Tree v-model="updateForm.moduleIds" ref="updateModules" :data="data4" multiple show-checkbox></Tree>-->
-                <!--</FormItem>-->
+        <div>
+            <ul>
+                <li>
+                    <Button type="primary" icon="plus-round" @click="addRole()">新建</Button>
+                    <Button type="success" icon="wrench" @click="edit()">修改</Button>
+                    <Button type="error" icon="trash-a" @click="remove()">删除</Button>
+                </li>
+                <li>
+                    <div style="padding: 10px 0;">
+                        <Table border :columns="columns1" :data="data1" @on-selection-change="s=>{change(s)}"></Table>
+                    </div>
+                </li>
+                <li>
+                    <div style="text-align: right;">
+                        <Page :total="totalCount" :page-size="pageSize" :current="pageNo" @on-change="gopage"
+                              align="center"></Page>
+                    </div>
+                </li>
+            </ul>
+        </div>
 
-                <FormItem label="权限" prop="moduleIds">
-                    <ul id="updateTree" class="ztree"></ul>
-                </FormItem>
+        <Modal
+                v-model="addModal"
+                title="添加角色"
+                :mask-closable="false"
+                :loading="loading"
+                @on-ok="add"
+                @on-cancel="cancel"
+                width="60%">
+            <Form ref="addForm" :model="addForm" :rules="ruleCustom" :label-width="80">
+                <Row>
+                    <Col span="11">
+                    <FormItem label="角色名字" prop="name">
+                        <Input type="text" v-model="addForm.name"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
+                    <FormItem label="备注" prop="remark">
+                        <Input type="text" v-model="addForm.remark"/>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="排序号" prop="orderNo">
+                        <Input type="text" v-model="addForm.orderNo"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                </Row>
+                <Row>
+                    <Input type="hidden" v-model="addForm.moduleIds"/>
+                    <FormItem label="权限" prop="moduleIds">
+                        <ul id="addTree" class="ztree"></ul>
+                    </FormItem>
+                </Row>
             </Form>
         </Modal>
+
+
         <Modal
-                v-model="modal2"
-                title="添加角色"
-                @on-ok="add"
-                @on-cancel="cancel" width="60%">
-            <Form ref="addForm" :model="addForm" :rules="ruleCustom" :label-width="80">
-                <FormItem label="角色名字" prop="name">
-                    <Input type="text" v-model="addForm.name"/>
-                </FormItem>
-                <Input type="hidden" v-model="addForm.moduleIds"/>
-                <!--<FormItem label="权限" prop="moduleIds">-->
+                v-model="updateModal"
+                title="编辑角色"
+                :mask-closable="false"
+                :loading="loading"
+                @on-ok="update"
+                @on-cancel="cancel"
+                width="60%">
+            <Form ref="updateForm" :model="updateForm" :rules="ruleCustom" :label-width="80">
 
-                    <!--<Tree v-model="addForm.moduleIds" ref="addModules" :data="data3" :load-data="getAllModules" show-checkbox></Tree>-->
+                <Row>
+                    <Col span="11">
+                    <FormItem label="角色名字" prop="name">
+                        <Input type="text" v-model="updateForm.name"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
+                    <FormItem label="备注" prop="remark">
+                        <Input type="text" v-model="updateForm.remark"/>
+                    </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="11">
+                    <FormItem label="排序号" prop="orderNo">
+                        <Input type="text" v-model="updateForm.orderNo"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                </Row>
 
-                <!--</FormItem>-->
-                <FormItem label="权限" prop="moduleIds">
-                    <ul id="addTree" class="ztree"></ul>
-                </FormItem>
+                <Row>
+                    <Col span="24">
+                        <FormItem label="权限" prop="moduleIds">
+                            <ul id="updateTree" class="ztree"></ul>
+                        </FormItem>
+                    </Col>
+                </Row>
             </Form>
         </Modal>
     </div>
@@ -60,34 +123,51 @@
 
     export default {
         data() {
-            const validateUser = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入角色名'));
-                }
-            };
-            const validateAddr = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入地址'));
-                }
-            };
-            const validateid = (rule, value, callback) => {
-                if (value==='') {
-                    return callback(new Error('年龄不能为空'));
-                }
-                // 模拟异步验证效果
-                setTimeout(() => {
-                    if (!Number.isInteger(value)) {
-                        callback(new Error('请输入整数'));
-                    } else {
-                        if (value < 18) {
-                            callback(new Error('必须年满18！'));
-                        } else {
-                            callback();
-                        }
-                    }
-                }, 1000);
-            };
             return {
+                loading:true,
+                count: 0,
+                gourpId: null,
+                pageSize: 20,
+                pageNo: 1,
+                totalPage: 0,
+                totalCount: 0,
+                name:"",
+                columns1: [
+                    {
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
+                    },
+                    {
+                        title: '角色名字',
+                        key: 'name'
+                    },
+                    {
+                        title: '备注',
+                        key: 'remark'
+                    },
+                    {
+                        title: '排序号',
+                        key: 'orderNo'
+                    }
+                ],
+                self: this,
+                data1: [],
+                updateModal: false,
+                addModal: false,
+                updateForm: {
+                    name:"",
+                    remark:"",
+                    orderNo:"",
+                    moduleIds:""
+                },
+                addForm: {
+                    name:"",
+                    remark:"",
+                    orderNo:"",
+                    moduleIds:""
+                },
+                zTreeObj:{},
                 setting:{
                     check: {
                         enable: true
@@ -97,260 +177,179 @@
                             enable: true
                         }
                     }
-                },zNodes:[
-                    { id:1, pId:0, name:"随意勾选 1", open:true},
-                    { id:11, pId:1, name:"随意勾选 1-1", open:true},
-                    { id:111, pId:11, name:"随意勾选 1-1-1"},
-                    { id:112, pId:11, name:"随意勾选 1-1-2"},
-                    { id:12, pId:1, name:"随意勾选 1-2", open:true},
-                    { id:121, pId:12, name:"随意勾选 1-2-1"},
-                    { id:122, pId:12, name:"随意勾选 1-2-2"},
-                    { id:2, pId:0, name:"随意勾选 2", checked:true, open:true},
-                    { id:21, pId:2, name:"随意勾选 2-1"},
-                    { id:22, pId:2, name:"随意勾选 2-2", open:true},
-                    { id:221, pId:22, name:"随意勾选 2-2-1", checked:true},
-                    { id:222, pId:22, name:"随意勾选 2-2-2"},
-                    { id:23, pId:2, name:"随意勾选 2-3"}
-                ],
-                tempIndex:0,
-                pageSize:20,
-                pageNo:1,
-                totalPage:0,
-                totalCount:0,
-                columns1: [
-                    {
-                        title: '编号',
-                        key: 'id'
-                    },
-                    {
-                        title: '角色名字',
-                        key: 'name'
-                    },
-                    {
-                        title: '操作',
-                        key: 'action',
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('div', [
-//                                h('Button', {
-//                                    props: {
-//                                        type: 'primary',
-//                                        size: 'small'
-//                                    },
-//                                    style: {
-//                                        marginRight: '5px'
-//                                    },
-//                                    on: {
-//                                        click: () => {
-//                                            this.show(params.index)
-//                                        }
-//                                    }
-//                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.edit(params.index)
-                                        }
-                                    }
-                                }, '编辑'),
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.remove(params.index)
-                                        }
-                                    }
-                                }, '删除')
-                            ]);
-                        }
-                    }
-                ],
-                self: this,
-                data1: [
-
-                ],
-                modal1: false,
-                modal2: false,
-                updateForm: {
-                    id:'',
-                    name: '',
-                    moduleIds:""
                 },
-                addForm: {
-                    name: '',
-                    moduleIds:""
-                },data3: [
+                zNodes:[
 
                 ],
                 ruleCustom: {
                     name: [
-                        { validator: validateUser, trigger: 'blur' }
-                    ],
-                    id: [
-                        { validator: validateid, trigger: 'blur' }
+                        {required: true, message:'角色名字不能为空',trigger:'blur'}
                     ]
-                },
-                zTreeObj:{}
+                    ,
+                    remark: [
+                        {required: true, message:'备注不能为空',trigger:'blur'}
+                    ]
+                    ,
+                    orderNo: [
+                        {required: true, message:'排序号不能为空',trigger:'blur'}
+                    ]
+                }
             }
         },
         methods: {
+            change(e){
+                if (e.length == 1) {
+                    this.updateForm = e[0];
+                }
+                this.setGroupId(e);
+            },
+            setGroupId(e)
+            {
+                this.groupId = [];
+                this.count = e.length;
+                for (var i = 0; i < e.length; i++) {
+                    this.groupId.push(e[i].id);
+                }
+            },
+            reset(form){
+                this.$refs[form].resetFields();
+            },
             addRole(){
-                this.modal2=true;
-
+                this.addModal = true;
             },
             add(){
+                this.$refs['addForm'].validate((valid)=>{
+                    if(valid)
+                    {
+                        const role = this.addForm;
+                        //vue官网 组件-子组件引用章节
+                        const nodes = this.zTreeObj.getCheckedNodes(true);		//取得选中的结点
+                        var str = "";
+                        for (let i = 0; i < nodes.length; i++) {
+                            if (str != "") {
+                                str += ",";
+                            }
+                            str += nodes[i].id;
+                        }
 
-                const role = this.addForm;
-                //vue官网 组件-子组件引用章节
-//                const selectedNodes = this.$refs.addModules.getCheckedNodes();
-//                selectedNodes.forEach((node,i)=>{
-//                    this.addForm.moduleIds += node.id;
-//                    if(i+1<selectedNodes.length){
-//                        this.addForm.moduleIds +=",";
-//                    }
-//                });
-
-                const nodes = this.zTreeObj.getCheckedNodes(true);		//取得选中的结点
-                var str = "";
-                for (let i = 0; i < nodes.length; i++) {
-                    if (str != "") {
-                        str += ",";
+                        this.addForm.moduleIds=str;
+                        fetch({
+                            url: '/system/role',
+                            method: 'post',
+                            params: role
+                        }).then((result) => {
+                            this.gopage(this.pageNo);
+                            this.$refs['addForm'].resetFields();
+                            this.$Message.success('Success!');
+                            this.addModal = false;
+                        });
                     }
-                    str += nodes[i].id;
-                }
-
-                this.addForm.moduleIds=str;
-                fetch({
-                    url: '/system/role',
-                    method: 'post',
-                    params:role
-                }).then((result) => {
-                    this.data1.unshift(result.data);
-                    this.$Message.success('Success!');
-                });
-
-            },
-            getAllModules (item, callback) {
-                setTimeout(() => {
-
-                    fetch({
-                        url: '/system/module/getChildren/'+item.id,
-                        method: 'get'
-                    }).then((result) => {
-                        callback(result.data);
-                    });
-
-
-                }, 500);
-            },
-            show (index) {
-                this.$Modal.info({
-                    title: '角色信息',
-                    content: `姓名：${this.data1[index].name}`
+                    else
+                    {
+                        this.$Message.error("表单验证失败");
+                        setTimeout(()=>{
+                            this.loading=false;
+                            this.$nextTick(()=>{
+                                this.loading=true;
+                            });
+                        },1000);
+                    }
                 })
             },
-            remove (index) {
-                const id = this.data1[index].id;
-                fetch({
-                    url: '/system/role',
-                    method: 'delete',
-                    params:{ids:id}
-                }).then((result) => {
-                    if(result.data=='1')
-                    {
-                        this.$Message.success('Success!');
-                        this.data1.splice(index, 1);
-                    }
-                });
-            },
-            ok () {
-                this.modal1 = false,
-                        this.$Message.info('点击了确定');
-            },
-            cancel () {
-                this.$Message.info('点击了取消');
-            },
-            edit (index) {
-                this.$refs.updateForm.resetFields();
-                this.tempIndex=index;
-                this.updateForm.name=this.data1[index].name;
-                this.updateForm.id=this.data1[index].id;
-                const  roleId = this.data1[index].id;
-                //初始化tree
-                fetch({
-                    url: '/system/module/getAllModules/'+roleId,
-                    method: 'get'
-                }).then((result) => {
-//                    this.data4 = result.data;
-                    this.modal1=true;
-                    this.zTreeObj = $.fn.zTree.init($("#updateTree"), this.setting, result.data);
-                });
-
-
-            },
-            update (name) {
-
-                const role = this.updateForm;
-                //vue官网 组件-子组件引用章节
-//                const selectedNodes = this.$refs.updateModules.getCheckedNodes();
-//                selectedNodes.forEach((node,i)=>{
-//                    this.updateForm.moduleIds += node.id;
-//                    if(i+1<selectedNodes.length){
-//                        this.updateForm.moduleIds +=",";
-//                    }
-//                });
-
-
-
-                const nodes = this.zTreeObj.getCheckedNodes(true);		//取得选中的结点
-                var str = "";
-                for (let i = 0; i < nodes.length; i++) {
-                    if (str != "") {
-                        str += ",";
-                    }
-                    str += nodes[i].id;
+            edit () {
+                if (this.count != 1) {
+                    this.updateModal = false;
+                    this.$Message.warning('请至少并只能选择一项');
                 }
+                else {
+                    this.updateModal = true;
 
-                this.updateForm.moduleIds=str;
-                fetch({
-                    url: '/system/role',
-                    method: 'put',
-                    params:role
-                }).then((result) => {
-                    this.$Message.success('Success!');
-                });
+                    const  roleId = this.groupId[0];
+                    //初始化tree
+                    fetch({
+                        url: '/system/module/getAllModules/'+roleId,
+                        method: 'get'
+                    }).then((result) => {
+//                    this.data4 = result.data;
+                        this.modal1=true;
+                        this.zTreeObj = $.fn.zTree.init($("#updateTree"), this.setting, result.data);
+                    });
+
+                }
             },
-            handleReset (name) {
-                this.$refs[name].resetFields();
+            update () {
+                this.$refs['updateForm'].validate((valid)=>{
+                    if(valid)
+                    {
+                        const nodes = this.zTreeObj.getCheckedNodes(true);		//取得选中的结点
+                        var str = "";
+                        for (let i = 0; i < nodes.length; i++) {
+                            if (str != "") {
+                                str += ",";
+                            }
+                            str += nodes[i].id;
+                        }
+
+                        this.updateForm.moduleIds=str;
+                        fetch({
+                            url: '/system/role',
+                            method: 'put',
+                            params: this.updateForm
+                        }).then((result) => {
+                            this.updateModal = false,
+                                    this.$Message.success('Success!');
+                            this.gopage(this.pageNo);
+                        });
+                    }
+                    else
+                    {
+                        this.$Message.error("表单验证失败");
+                        setTimeout(()=>{
+                            this.loading=false;
+                            this.$nextTick(()=>{
+                                this.loading=true;
+                            });
+                        },1000);
+                    }
+                })
             },
-            gopage(pageNo){
+            remove () {
+                if (this.groupId != null && this.groupId != "") {
+                    fetch({
+                        url: '/system/role',
+                        method: 'delete',
+                        data: this.groupId
+                    }).then((result) => {
+                        if (result.data == '1') {
+                            this.$Message.success('Success!');
+                            this.gopage(this.pageNo);
+                        }
+                    });
+                } else {
+                    this.$Message.warning('请至少选择一项');
+                }
+            },
+            gopage(){
+                const pageNo = this.pageNo;
                 const pageSize = this.pageSize;
+                const name = this.name;
                 fetch({
                     url: '/system/role',
                     method: 'get',
-                    params:{pageNo,pageSize}
+                    params: {pageNo, pageSize,name}
                 }).then((result) => {
-                    this.data1=result.data.list;
-                    this.pageNo=pageNo;
-                    this.pageSize=pageSize;
-                    this.totalCount=result.data.totalCount;
+                    this.data1 = result.data.list;
+                    this.pageNo = pageNo;
+                    this.pageSize = pageSize;
+                    this.totalCount = result.data.totalCount;
                 });
+            },
+            cancel () {
+                this.$Message.info('点击了取消');
             }
         },
-        mounted:function(){
-            this.gopage(this.pageNo);
-
-
+        mounted: function () {
+            this.gopage();
             //初始化addTree
             fetch({
                 url: '/system/module/getAllModules',
@@ -359,13 +358,11 @@
                 // this.data3 = result.data;
                 this.zTreeObj = $.fn.zTree.init($("#addTree"), this.setting, result.data);
             });
-
-
         }
     }
-</script>
 
+
+</script>
 <style scoped>
     @import "/static/ztree/css/zTreeStyle/zTreeStyle.css";
-    /*@import "/static/ztree/css/demo.css";*/
 </style>

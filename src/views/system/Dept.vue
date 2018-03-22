@@ -2,39 +2,83 @@
 
 
     <div class="animated fadeIn">
-        <!--<Icon type="android-add"></Icon>-->
-        <div id="container">
-            <Icon type="android-add-circle"></Icon>
-            <i-button type="error" @click="addDept">添加部门</i-button>
+        <div>
+            <Row style="margin-bottom: 25px;">
+                <Col span="8">部门名字：
+                <Input v-model="deptNo" placeholder="请输入..." style="width:200px"/>
+                </Col>
+                <Col span="8"><Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button></Col>
+            </Row>
         </div>
-        <br>
-        <Table :columns="columns1" :data="data1"></Table>
-        <Page :total="totalCount" :page-size="pageSize" :current="pageNo" @on-change="gopage" align="center"></Page>
+        <div>
+            <ul>
+                <li>
+                    <Button type="primary" icon="plus-round" @click="addDept()">新建</Button>
+                    <Button type="success" icon="wrench" @click="edit()">修改</Button>
+                    <Button type="error" icon="trash-a" @click="remove()">删除</Button>
+                </li>
+                <li>
+                    <div style="padding: 10px 0;">
+                        <Table border :columns="columns1" :data="data1" @on-selection-change="s=>{change(s)}"></Table>
+                    </div>
+                </li>
+                <li>
+                    <div style="text-align: right;">
+                        <Page :total="totalCount" :page-size="pageSize" :current="pageNo" @on-change="gopage"
+                              align="center"></Page>
+                    </div>
+                </li>
+            </ul>
+        </div>
+
+
         <Modal
                 v-model="modal1"
-                title="编辑用户"
+                title="编辑部门"
+                width="60%"
+                :mask-closable="false"
+                :loading="loading"
                 @on-ok="update"
-                @on-cancel="cancel" width="60%">
+                @on-cancel="cancel">
             <Form ref="updateForm" :model="updateForm" :rules="ruleCustom" :label-width="80">
-                <FormItem label="部门名字" prop="deptName">
-                    <Input type="text" v-model="updateForm.deptName"></Input>
-                </FormItem>
-                <!--<FormItem>-->
-                    <!--<Button type="primary" @click="update('updateForm')">保存</Button>-->
-                    <!--<Button type="ghost" @click="handleReset('updateForm')" style="margin-left: 8px">Reset</Button>-->
-                <!--</FormItem>-->
+
+                <Row>
+                    <Col span="11">
+                    <FormItem label="部门名字" prop="deptName">
+                        <Input type="text" v-model="updateForm.deptName"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
+                    <FormItem label="状态" prop="state">
+                        <RadioGroup v-model="updateForm.state" type="button">
+                            <Radio label="0">不可用</Radio>
+                            <Radio label="1">可用</Radio>
+                        </RadioGroup>
+                    </FormItem>
+                    </Col>
+                </Row>
             </Form>
         </Modal>
         <Modal
                 v-model="modal2"
-                title="添加用户"
+                title="添加部门"
+                :mask-closable="false"
+                :loading="loading"
                 @on-ok="add"
                 @on-cancel="cancel" width="60%">
-            <Form ref="addForm" :model="addForm" :rules="ruleCustom" :label-width="80">
-                <FormItem label="部门名字" prop="deptName">
-                    <Input type="text" v-model="addForm.deptName"></Input>
-                </FormItem>
+            <Form  ref="addForm" :model="addForm" :rules="ruleCustom"  :label-width="80">
+                <Row>
+                    <Col span="11">
+                    <FormItem label="部门名字" prop="deptName">
+                        <Input type="text" v-model="addForm.deptName"/>
+                    </FormItem>
+                    </Col>
+                    <Col span="2" style="text-align: center"/>
+                    <Col span="11">
 
+                    </Col>
+                </Row>
             </Form>
         </Modal>
     </div>
@@ -42,206 +86,219 @@
 
 <script type="text/ecmascript-6">
     import fetch from 'utils/fetch';
+    import {dateFormat} from 'utils/date';
 
     export default {
         data() {
-            const validateUser = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入用户名'));
-                }
-            };
-            const validateAddr = (rule, value, callback) => {
-                if (value === '') {
-                    callback(new Error('请输入地址'));
-                }
-            };
-            const validateid = (rule, value, callback) => {
-                if (value==='') {
-                    return callback(new Error('年龄不能为空'));
-                }
-                // 模拟异步验证效果
-                setTimeout(() => {
-                    if (!Number.isInteger(value)) {
-                        callback(new Error('请输入整数'));
-                    } else {
-                        if (value < 18) {
-                            callback(new Error('必须年满18！'));
-                        } else {
-                            callback();
-                        }
-                    }
-                }, 1000);
-            };
             return {
-                tempIndex:0,
-                pageSize:2,
-                pageNo:1,
-                totalPage:0,
-                totalCount:0,
+                loading:true,
+                count: 0,
+                gourpId: null,
+                pageSize: 20,
+                pageNo: 1,
+                totalPage: 0,
+                totalCount: 0,
+                deptNo:"",
                 columns1: [
                     {
-                        title: '编号',
-                        key: 'id'
+                        type: 'selection',
+                        width: 60,
+                        align: 'center'
                     },
                     {
                         title: '部门名字',
                         key: 'deptName'
                     },
                     {
-                        title: '操作',
-                        key: 'action',
-                        align: 'center',
+                        title: '状态',
+                        key: 'state',
                         render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.show(params.index)
-                                        }
-                                    }
-                                }, '查看'),
-                                h('Button', {
-                                    props: {
-                                        type: 'primary',
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.edit(params.index)
-                                        }
-                                    }
-                                }, '编辑'),
-                                h('Button', {
-                                    props: {
-                                        type: 'error',
-                                        size: 'small'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.remove(params.index)
-                                        }
-                                    }
-                                }, '删除')
-                            ]);
+                            const task_status = parseInt(params.row.state);
+                            if (task_status === 0) {
+                                return "不可用";
+                            }
+                            else if (task_status === 1) {
+                                return "可用";
+                            }
+                            else {
+                                return "unkown"
+                            }
                         }
                     }
                 ],
                 self: this,
-                data1: [
-                    {
-                        deptName: '王小明',
-                        id: 18
-                    }
-                ],
+                data1: [],
                 modal1: false,
                 modal2: false,
                 updateForm: {
-                    deptName: '',
-                    id: ''
+                    id:"",
+                    deptName:"",
+                    parentId:"",
+                    state:""
                 },
                 addForm: {
-                    deptName: ''
+                    deptName:"",
+                    parentId:"",
+                    state:"1"
                 },
                 ruleCustom: {
                     deptName: [
-                        { validator: validateUser, trigger: 'blur' }
-                    ],
-                    id: [
-                        { validator: validateid, trigger: 'blur' }
+                        {required: true, message:'不能为空',trigger:'blur'}
+                    ]
+                    ,
+                    state: [
+                        {required: true, message:'状态不能为空',trigger:'blur'}
                     ]
                 }
             }
         },
         methods: {
+            reset(form){
+                this.$refs[form].resetFields();
+            },
             addDept(){
-              this.modal2=true;
+                this.modal2 = true;
             },
             add(){
-
-                const dept = this.addForm;
-
-                fetch({
-                    url: '/system/dept',
-                    method: 'post',
-                    data:dept
-                }).then((result) => {
-                    this.data1.unshift(result.data);
-                    this.$Message.success('Success!');
-                });
-            },
-            show (index) {
-                this.$Modal.info({
-                    title: '部门信息',
-                    content: `姓名：${this.data1[index].deptName}`
+                this.$refs['addForm'].validate((valid)=>{
+                    if(valid)
+                    {
+                        const dept = this.addForm;
+                        fetch({
+                            url: '/system/dept',
+                            method: 'post',
+                            data: dept
+                        }).then((result) => {
+                            this.gopage(this.pageNo);
+                            this.$refs['addForm'].resetFields();
+                            this.$Message.success('Success!');
+                            this.modal2 = false;
+                        });
+                    }
+                    else
+                    {
+                        this.$Message.error("表单验证失败");
+                            setTimeout(()=>{
+                                this.loading=false;
+                                this.$nextTick(()=>{
+                                    this.loading=true;
+                                });
+                            },1000);
+                    }
                 })
             },
-            edit (index) {
-                this.modal1=true;
-                this.tempIndex=index;
-                this.updateForm.deptName=this.data1[index].deptName;
+            change(e){
+                if (e.length == 1) {
+                    this.updateForm = e[0];
+                }
+                this.setGroupId(e);
             },
-            remove (index) {
-                const id = this.data1[index].id;
-                fetch({
-                    url: '/system/dept',
-                    method: 'delete',
-                    params:{ids:id}
-                }).then((result) => {
-                    if(result.data=='1')
-                    {
-                        this.$Message.success('Success!');
-                        this.data1.splice(index, 1);
-                    }
-                });
+            setGroupId(e)
+            {
+                this.groupId = [];
+                this.count = e.length;
+                for (var i = 0; i < e.length; i++) {
+                    this.groupId.push(e[i].id);
+                }
             },
-            ok () {
-                this.modal1 = false,
-                this.$Message.info('点击了确定');
+            edit () {
+                if (this.count != 1) {
+                    this.modal1 = false;
+                    this.$Message.warning('请至少并只能选择一项');
+                }
+                else {
+                    this.modal1 = true;
+                    this.updateForm.state = this.updateForm.state+"";
+                }
             },
-            cancel () {
-                this.$Message.info('点击了取消');
-            },
-            update (deptName) {
-                this.data1[this.tempIndex].deptName=this.updateForm.deptName;
-                const dept = this.data1[this.tempIndex];
+            remove () {
+                if (this.groupId != null && this.groupId != "") {
+                    fetch({
+                        url: '/system/dept',
+                        method: 'delete',
+                        data: this.groupId
+                    }).then((result) => {
+                        if (result.data == '1') {
+                            this.$Message.success('Success!');
+                            this.gopage(this.pageNo);
+                        }
+                    });
+                } else {
+                    this.$Message.warning('请至少选择一项');
+                }
 
-                fetch({
-                    url: '/system/dept',
-                    method: 'put',
-                    data:dept
-                }).then((result) => {
-                    this.$Message.success('Success!');
-                });
             },
-            handleReset (deptName) {
-                this.$refs[deptName].resetFields();
+            update () {
+
+                this.$refs['updateForm'].validate((valid)=>{
+                    if(valid)
+                    {
+                        fetch({
+                            url: '/system/dept',
+                            method: 'put',
+                            data: this.updateForm
+                        }).then((result) => {
+                            this.modal1 = false,
+                                    this.$Message.success('Success!');
+                            //刷新页面数据
+                            this.gopage(this.pageNo);
+                        });
+                    }
+                    else
+                    {
+                        this.$Message.error("表单验证失败");
+                        setTimeout(()=>{
+                            this.loading=false;
+                            this.$nextTick(()=>{
+                                this.loading=true;
+                            });
+                        },1000);
+                    }
+                })
+
             },
-            gopage(pageNo){
+            handleReset (form) {
+                this.$refs[form].resetFields();
+            },
+            gopage(){
+                const pageNo = this.pageNo;
                 const pageSize = this.pageSize;
+                const deptNo = this.deptNo;
                 fetch({
                     url: '/system/dept',
                     method: 'get',
-                    params:{pageNo,pageSize}
+                    params: {pageNo, pageSize,deptNo}
                 }).then((result) => {
-                    this.data1=result.data.list;
-                    this.pageNo=pageNo;
-                    this.pageSize=pageSize;
-                    this.totalCount=result.data.totalCount;
+                    this.data1 = result.data.list;
+                    this.pageNo = pageNo;
+                    this.pageSize = pageSize;
+                    this.totalCount = result.data.totalCount;
                 });
+            },
+            submit(){
+                if (this.groupId != null && this.groupId != "") {
+                    fetch({
+                        url: '/system/dept/submit',
+                        method: 'put',
+                        data: this.groupId
+                    }).then((result) => {
+                        if (result.data == '1') {
+                            this.$Message.success('Success!');
+                            this.gopage();
+                        }
+                    });
+                } else {
+                    this.$Message.warning('请至少选择一项');
+                }
+            },
+            cancel () {
+                this.$Message.info('点击了取消');
             }
         },
-        created:function(){
-            this.gopage(this.pageNo)
+        mounted: function () {
+            this.gopage()
         }
     }
+
+
 </script>

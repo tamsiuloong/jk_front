@@ -2,14 +2,14 @@
 
 
     <div class="animated fadeIn">
-        <!--<div>-->
-        <!--<Row style="margin-bottom: 25px;">-->
-        <!--<Col span="8">登录名：-->
-        <!--<Input v-model="loginName" placeholder="请输入..." style="width:200px"></Input>-->
-        <!--</Col>-->
-        <!--<Col span="8"><Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button></Col>-->
-        <!--</Row>-->
-        <!--</div>-->
+        <div>
+        <Row style="margin-bottom: 25px;">
+        <Col span="8">合同号：
+        <Input v-model="contractNo" placeholder="请输入..." style="width:200px"/>
+        </Col>
+        <Col span="8"><Button type="primary" shape="circle" icon="ios-search" @click="search()">搜索</Button></Col>
+        </Row>
+        </div>
         <div>
             <ul>
                 <li>
@@ -46,6 +46,7 @@
                         <Input type="text" v-model="updateForm.customName"/>
                     </FormItem>
                     </Col>
+
                     <Col span="2" style="text-align: center"/>
                     <Col span="11">
                     <FormItem label="打印板式" prop="printStyle">
@@ -312,6 +313,7 @@
                 pageNo: 1,
                 totalPage: 0,
                 totalCount: 0,
+                contractNo:"",
                 columns1: [
                     {
                         type: 'selection',
@@ -558,12 +560,14 @@
             handleReset (form) {
                 this.$refs[form].resetFields();
             },
-            gopage(pageNo){
+            gopage(){
+                const pageNo = this.pageNo;
                 const pageSize = this.pageSize;
+                const contractNo = this.contractNo;
                 fetch({
-                    url: '/cargo/contract/all',
+                    url: '/cargo/contract/1',
                     method: 'get',
-                    params: {pageNo, pageSize}
+                    params: {pageNo, pageSize,contractNo}
                 }).then((result) => {
                     this.data1 = result.data.list;
                     this.pageNo = pageNo;
@@ -580,7 +584,7 @@
                     }).then((result) => {
                         if (result.data == '1') {
                             this.$Message.success('Success!');
-                            this.gopage(this.pageNo);
+                            this.gopage();
                         }
                     });
                 } else {
@@ -596,16 +600,19 @@
                     }).then((result) => {
                         if (result.data == '1') {
                             this.$Message.success('Success!');
-                            this.gopage(this.pageNo);
+                            this.gopage();
                         }
                     });
                 } else {
                     this.$Message.warning('请至少选择一项');
                 }
+            },
+            search(){
+                this.gopage();
             }
         },
         mounted: function () {
-            this.gopage(this.pageNo)
+            this.gopage()
         }
     }
 
